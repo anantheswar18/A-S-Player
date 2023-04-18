@@ -53,6 +53,8 @@ dependencies:
   text_scroll: ^0.2.0
   top_snackbar_flutter: ^3.0.0+1
   flutter_snake_navigationbar: ^0.6.1
+  share_plus: ^6.3.2
+  flutter_markdown: ^0.6.14
   
 dev_dependencies:
   build_runner: ^2.3.3
@@ -105,6 +107,8 @@ flutter:
     - assets/images/party.jpeg
     - assets/images/AS player Logo png.png
     - assets/images/disk.jpg
+    - assets/privacypolicy.md
+    - assets/termsandconditons.md
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,7 +1,9 @@
+import 'package:as_player/Screens/popupsettings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:share_plus/share_plus.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -166,10 +168,15 @@ class _SettingsState extends State<Settings> {
             // ),
             InkWell(
               onTap: () {
-                
+                Share.share("https://github.com/anantheswar18/A-S-Player.git",
+                    subject: "A S Music Player");
               },
               child: items(
-                  Icon(Icons.share,size: 30,color: Colors.white,),
+                  Icon(
+                    Icons.share,
+                    size: 30,
+                    color: Colors.white,
+                  ),
                   Text(
                     "Share App ",
                     style: TextStyle(
@@ -178,48 +185,97 @@ class _SettingsState extends State<Settings> {
                         fontWeight: FontWeight.w500),
                   )),
             ),
-                line(),
-                items(
-                Icon(Icons.privacy_tip_rounded,size: 30,color: Colors.white,),
-                Text(
-                  "Privacy Policy ",
-                  style: TextStyle(
-                      fontSize: 25,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500),
-                )),
-                line(),
-                items(
-                Icon(Icons.info_outline,size: 30,color: Colors.white,),
-                Text(
-                  "About  ",
-                  style: TextStyle(
-                      fontSize: 25,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500),
-                )),
-                line(),
-                items(
-                Icon(Icons.document_scanner_outlined,size: 30,color: Colors.white,),
-                Text(
-                  "Terms And Conditions ",
-                  style: TextStyle(
-                      fontSize: 25,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500),
-                )),
-                line()
+            line(),
+            InkWell(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (builder) {
+                    return settingmenupopup(mdFilename: 'privacypolicy.md');
+                  },
+                );
+              },
+              child: items(
+                  Icon(
+                    Icons.privacy_tip_rounded,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    "Privacy Policy ",
+                    style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500),
+                  )),
+            ),
+            line(),
+            InkWell(
+              onTap: () {
+                showAboutDialog(
+                    context: context,
+                    applicationName: "A S Player. ",
+                    applicationIcon: Image.asset(
+                      "assets/images/AS player Logo png.png",
+                      height: 32,
+                      width: 32,
+                    ),
+                    applicationVersion: "1.0.0",
+                    children: [
+                      Text(
+                          "A S Player is an offline music player app which allows user to hear music from their local storage and also do functions like add to favorites,Create playlists,Recently played, Mostly Played etc....."),
+                      SizedBox(height: 10),
+                      Text("App development by Anantheswara Shenoy.V"),
+                    ]);
+              },
+              child: items(
+                  Icon(
+                    Icons.info_outline,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    "About  ",
+                    style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500),
+                  )),
+            ),
+            line(),
+            InkWell(
+              onTap: () {
+                showDialog(context: context, builder: (context) {
+                  return settingmenupopup(mdFilename: 'termsandconditons.md');
+                },);
+              },
+              child: items(
+                  Icon(
+                    Icons.document_scanner_outlined,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    "Terms And Conditions ",
+                    style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500),
+                  )),
+            ),
+            line()
           ],
         ),
       ),
     );
   }
 
-  Widget items(Widget icon, Widget text,) {
+  Widget items(
+    Widget icon,
+    Widget text,
+  ) {
     return ListTile(
-      onTap: (){
-
-      },
+     
       leading: icon,
       title: text,
     );
