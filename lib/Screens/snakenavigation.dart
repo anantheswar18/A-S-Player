@@ -57,13 +57,13 @@ class _SnakeNavbarScreenState extends State<SnakeNavbarScreen> {
       extendBody: true,
       extendBodyBehindAppBar: true,
       bottomNavigationBar: SnakeNavigationBar.color(
-        behaviour: SnakeBarBehaviour.floating,
+        behaviour: SnakeBarBehaviour.pinned,
         backgroundColor: const Color(0xFF091227), 
         snakeShape: snakeShape,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25)),
         ),
-        padding: EdgeInsets.only(top: 5,left: 12,right: 12,bottom: 12),
+        padding: EdgeInsets.only(top: 5,left: 12,right: 12,bottom: 10),
         snakeViewColor: selectedColor,
         selectedItemColor:
             snakeShape == SnakeShape.indicator ? selectedColor : null,

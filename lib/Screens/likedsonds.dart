@@ -89,77 +89,77 @@ class _LikedSongsState extends State<LikedSongs> {
           child: Column(
             children: [
               SizedBox(height: height * 0.01),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 23, 35, 63),
-                        borderRadius: BorderRadius.circular(50)),
-                    height: height * 0.07,
-                    width: width * 0.48,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: width * 0.01,
-                        ),
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.shuffle,
-                              size: 30,
-                              color: Colors.white,
-                            )),
-                        SizedBox(
-                          width: width * 0.03,
-                        ),
-                        Text(
-                          "Shuffle All ",
-                          style: GoogleFonts.lato(
-                              textStyle: Theme.of(context).textTheme.bodyLarge,
-                              fontSize: 23,
-                              color: Colors.white),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 23, 35, 63),
-                        borderRadius: BorderRadius.circular(50)),
-                    height: height * 0.07,
-                    width: width * 0.45,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: width * 0.05,
-                        ),
-                        IconButton(
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => PlayingNow(),
-                              ));
-                            },
-                            icon: const Icon(
-                              Icons.play_circle_fill,
-                              size: 40,
-                              color: Color.fromARGB(255, 28, 37, 77),
-                            )),
-                        SizedBox(
-                          width: width * 0.03,
-                        ),
-                        Text(
-                          "Play",
-                          style: GoogleFonts.lato(
-                              textStyle: Theme.of(context).textTheme.bodyLarge,
-                              fontSize: 25,
-                              color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //   children: [
+              //     Container(
+              //       decoration: BoxDecoration(
+              //           color: Color.fromARGB(255, 23, 35, 63),
+              //           borderRadius: BorderRadius.circular(50)),
+              //       height: height * 0.07,
+              //       width: width * 0.48,
+              //       child: Row(
+              //         children: [
+              //           SizedBox(
+              //             width: width * 0.01,
+              //           ),
+              //           // IconButton(
+              //           //     onPressed: () {},
+              //           //     icon: const Icon(
+              //           //       Icons.shuffle,
+              //           //       size: 30,
+              //           //       color: Colors.white,
+              //           //     )),
+              //           // SizedBox(
+              //           //   width: width * 0.03,
+              //           // ),
+              //           // Text(
+              //           //   "Shuffle All ",
+              //           //   style: GoogleFonts.lato(
+              //           //       textStyle: Theme.of(context).textTheme.bodyLarge,
+              //           //       fontSize: 23,
+              //           //       color: Colors.white),
+              //           // )
+              //         ],
+              //       ),
+              //     ),
+              //     Container(
+              //       decoration: BoxDecoration(
+              //           color: const Color.fromARGB(255, 23, 35, 63),
+              //           borderRadius: BorderRadius.circular(50)),
+              //       height: height * 0.07,
+              //       width: width * 0.45,
+              //       child: Row(
+              //         children: [
+              //           SizedBox(
+              //             width: width * 0.05,
+              //           ),
+              //           IconButton(
+              //               onPressed: () {
+              //                 Navigator.of(context).push(MaterialPageRoute(
+              //                   builder: (context) => PlayingNow(),
+              //                 ));
+              //               },
+              //               icon: const Icon(
+              //                 Icons.play_circle_fill,
+              //                 size: 40,
+              //                 color: Color.fromARGB(255, 28, 37, 77),
+              //               )),
+              //           SizedBox(
+              //             width: width * 0.03,
+              //           ),
+              //           Text(
+              //             "Play",
+              //             style: GoogleFonts.lato(
+              //                 textStyle: Theme.of(context).textTheme.bodyLarge,
+              //                 fontSize: 25,
+              //                 color: Colors.white),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ],
+              // ),
               ValueListenableBuilder<Box<favorites>>(
                   valueListenable: box.listenable(),
                   builder: (context, Box<favorites> favoritesdb, child) {
@@ -182,7 +182,7 @@ class _LikedSongsState extends State<LikedSongs> {
                               itemCount: favitemsongs.length,
                             ),
                           )
-                        : Center(child: Text("You haven't liked any Songs"));
+                        : Center(child: Text("You haven't liked any Songs"),heightFactor: height*0.05);
                   }),
             ],
           ),

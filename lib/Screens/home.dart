@@ -24,6 +24,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:as_player/Functions/addToFavorite.dart';
 import 'package:text_scroll/text_scroll.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../Functions/createplaylist.dart';
 import '../Model/playlistmodel.dart';
@@ -164,18 +166,18 @@ class _HomePageState extends State<HomePage> {
                                   return sqr2(index, Recentplayed);
                                 },
                               )
-                            : Padding(
-                                padding: EdgeInsets.only(top: height * 0.3),
+                            : Center(
                                 child: Text(
                                   "You Have't played any songs",
                                   style: GoogleFonts.kanit(color: Colors.white),
                                 ),
+                                heightFactor: height * 0.01,
                               );
                       },
                     ),
                     SizedBox(height: height * 0.01),
                     navRecently()
-                  ],
+                  ], 
                 ),
                 Padding(
                   padding:
@@ -215,13 +217,13 @@ class _HomePageState extends State<HomePage> {
                                       ? mostfinalsonghome.length
                                       : 2,
                                 )
-                              : Padding(
-                                  padding: EdgeInsets.only(top: height * 0.3),
+                              : Center(
                                   child: Text(
                                     "Your most played songs will appear here!",
                                     style:
                                         GoogleFonts.kanit(color: Colors.white),
                                   ),
+                                  heightFactor: height * 0.01,
                                 );
                         },
                       ),
@@ -534,21 +536,21 @@ class _HomePageState extends State<HomePage> {
                 PopupMenuItem(
                   value: 2,
                   child: ListTile(
-                    leading: (checkFavStatus(songindex, BuildContext))
+                    leading: (checkFavStatus(songs.id, BuildContext))
                         ? Icon(Icons.favorite_border_outlined)
                         : Icon(
                             Icons.favorite_rounded,
                             color: Colors.red,
                           ),
                     title: Text(
-                        (checkFavStatus(songindex, BuildContext))
+                        (checkFavStatus(songs.id, BuildContext))
                             ? "Add To favorite"
                             : " Remove ",
                         style: TextStyle(fontSize: 15)),
                   ),
                   onTap: () {
-                    if (checkFavStatus(songindex, BuildContext)) {
-                      addToFav(songindex);
+                    if (checkFavStatus(songs.id, BuildContext)) {
+                      addToFav(songs.id);
                       final snackbar = SnackBar(
                         content: Text(
                           "Added to Favorites",
@@ -561,8 +563,8 @@ class _HomePageState extends State<HomePage> {
                         padding: EdgeInsets.only(top: 10, bottom: 15),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                    } else if (!checkFavStatus(songindex, BuildContext)) {
-                      removeFav(songindex);
+                    } else if (!checkFavStatus(songs.id, BuildContext)) {
+                      removeFav(songs.id);
                       final snackbar2 = SnackBar(
                         content: Text(
                           "Removed from Favorites",
@@ -606,17 +608,7 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (context) {
         return Container(
-          //  decoration: const BoxDecoration(
-          //   borderRadius: BorderRadius.only(topLeft: Radius.circular(60),topRight: Radius.circular(60)),
-          //   gradient: LinearGradient(
-          //     begin: Alignment.topLeft,
-          //     end: Alignment.bottomRight,
-          //     colors: [
-          //       Color(0xFF000428),
-          //       Color.fromARGB(255, 97, 132, 170),
-          //     ],
-          //   ),
-          // ),
+         
           height: height * 0.7,
           child: SingleChildScrollView(
             child: Column(
@@ -662,8 +654,11 @@ class _HomePageState extends State<HomePage> {
                               ),
                               itemCount: playlistsong.length,
                               itemBuilder: ((context, index) {
-                                return playlistcol( playlistsong[index].playlistName!,
-                                    index, playlistsongs, songindex);
+                                return playlistcol(
+                                    playlistsong[index].playlistName!,
+                                    index,
+                                    playlistsongs,
+                                    songindex);
                               }),
                             )
                           : Text(
@@ -736,7 +731,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget playlistcol(playlistname,indexe, playlistsongs, songindex) {
+  Widget playlistcol(playlistname, indexe, playlistsongs, songindex) {
     return Padding(
       padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
       child: Container(
@@ -745,70 +740,75 @@ class _HomePageState extends State<HomePage> {
             color: const Color(0xFF080E1D),
             borderRadius: BorderRadius.circular(10)),
         child: ListTile(
-          onTap: () {
-            PlaylistSongs? playsongs = playlistsongs.getAt(indexe);
-            List<Songs> playsongDB = playsongs!.playlistsSongs!;
-            List<Songs> songDB = songbox.values.toList();
-            bool AlreadyAdded =
-                playsongDB.any((element) => element.id == songDB[songindex].id);
-            if (!AlreadyAdded) {
-              playsongDB.add(Songs(
-                  songname: songDB[songindex].songname,
-                  artist: songDB[songindex].artist,
-                  duration: songDB[songindex].duration,
-                  id: songDB[songindex].id,
-                  songurl: songDB[songindex].songurl));
-            }
-            playlistsongs.putAt(
-                indexe,
-                PlaylistSongs(
-                    playlistName: playlistsong[indexe].playlistName!,
-                    playlistsSongs: playsongDB));
-            Navigator.of(context).pop();
-            log("added to${playlistsong[indexe].playlistName!}");
-          },
-          leading: ClipRRect(
+            onTap: () {
+              PlaylistSongs? playsongs = playlistsongs.getAt(indexe);
+              List<Songs> playsongDB = playsongs!.playlistsSongs!;
+              List<Songs> songDB = songbox.values.toList();
+              bool AlreadyAdded = playsongDB
+                  .any((element) => element.id == songDB[songindex].id);
+              if (!AlreadyAdded) {
+                playsongDB.add(Songs(
+                    songname: songDB[songindex].songname,
+                    artist: songDB[songindex].artist,
+                    duration: songDB[songindex].duration,
+                    id: songDB[songindex].id,
+                    songurl: songDB[songindex].songurl));
+              }
+              playlistsongs.putAt(
+                  indexe,
+                  PlaylistSongs(
+                      playlistName: playlistsong[indexe].playlistName!,
+                      playlistsSongs: playsongDB));
+              Navigator.of(context).pop();
+              log("added to${playlistsong[indexe].playlistName!}");
+               showTopSnackBar(
+                  Overlay.of(context),
+                  CustomSnackBar.info(
+                    message: "Added to Playlist",
+                    backgroundColor:       Color.fromARGB(255, 97, 132, 170),
+                  ));
+            },
+            leading: ClipRRect(
 
-              // borderRadius: BorderRadius.circular(20),
-              child: Padding(
-            padding: EdgeInsets.only(left: width * 0.01, top: height * 0.02),
-            child: CircleAvatar(
-              radius: 30,
-              child: Image.asset(
-                'assets/images/disk.jpg',
-                fit: BoxFit.cover,
+                // borderRadius: BorderRadius.circular(20),
+                child: Padding(
+              padding: EdgeInsets.only(left: width * 0.01, top: height * 0.02),
+              child: CircleAvatar(
+                radius: 30,
+                child: Image.asset(
+                  'assets/images/disk.jpg',
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-          )),
-          title: TextScroll(
-               playlistname,
-                style: GoogleFonts.kanit(color: Colors.white),
-              )),
-          // trailing: Padding(
-          //   padding: EdgeInsets.only(right: width * 0.001, top: height * 0.008),
-          //   child: Wrap(children: [
-          //     IconButton(
-          //         onPressed: () {
-          //           PopUpPlaylistEdit(index);
-          //         },
-          //         icon: const Icon(
-          //           Icons.edit,
-          //           size: 25,
-          //           color: Colors.white,
-          //         )),
-          //     IconButton(
-          //         onPressed: () {
-          //           PopUpPlaylistdelete(index);
-          //         },
-          //         icon: const Icon(
-          //           Icons.delete,
-          //           size: 25,
-          //           color: Colors.white,
-          //         )),
-          //   ]),
-          // ),
-        ),
-      );
-
+            )),
+            title: TextScroll(
+              playlistname,
+              style: GoogleFonts.kanit(color: Colors.white),
+            )),
+        // trailing: Padding(
+        //   padding: EdgeInsets.only(right: width * 0.001, top: height * 0.008),
+        //   child: Wrap(children: [
+        //     IconButton(
+        //         onPressed: () {
+        //           PopUpPlaylistEdit(index);
+        //         },
+        //         icon: const Icon(
+        //           Icons.edit,
+        //           size: 25,
+        //           color: Colors.white,
+        //         )),
+        //     IconButton(
+        //         onPressed: () {
+        //           PopUpPlaylistdelete(index);
+        //         },
+        //         icon: const Icon(
+        //           Icons.delete,
+        //           size: 25,
+        //           color: Colors.white,
+        //         )),
+        //   ]),
+        // ),
+      ),
+    );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:as_player/Functions/createplaylist.dart';
 import 'package:as_player/Model/playlistmodel.dart';
 import 'package:as_player/Model/playlistmodel.dart';
@@ -251,7 +252,7 @@ class _PlayListState extends State<PlayList> {
             child: Wrap(children: [
               IconButton(
                   onPressed: () {
-                    PopUpPlaylistEdit(index);
+                    PopUpPlaylistEdit(index,context);
                   },
                   icon: const Icon(
                     Icons.edit,
@@ -330,7 +331,7 @@ class _PlayListState extends State<PlayList> {
     );
   }
 
-  Future<void> PopUpPlaylistEdit(index) async {
+  Future<void> PopUpPlaylistEdit(index,context) async {
     final editController = TextEditingController();
     return showDialog(
       barrierColor: Color.fromARGB(255, 16, 36, 70),
@@ -376,8 +377,9 @@ class _PlayListState extends State<PlayList> {
               ),
               child: const Text('Rename'),
               onPressed: () {
-                editPlaylist(editController.text, index);
+                editPlaylist(editController.text, index,context);
                 Navigator.of(context).pop();
+               
               },
             ),
           ],
@@ -419,6 +421,9 @@ class _PlayListState extends State<PlayList> {
               onPressed: () {
                 deletePlaylist(index);
                 Navigator.of(context).pop();
+                AnimatedSnackBar.material("Playlist Deleted",
+            type: AnimatedSnackBarType.error)
+        .show(context);
               },
             ),
           ],

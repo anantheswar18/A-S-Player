@@ -9,7 +9,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:as_player/Screens/playingnow.dart';
 import 'package:as_player/Model/favorite.dart';
 
-addToFav(int index) async {
+addToFav(int? id) async {
   final box = SongBox.getInstance();
 
   List<Songs> dbsongs = box.values.toList();
@@ -17,33 +17,32 @@ addToFav(int index) async {
   List<favorites> favoritessongs = [];
   favoritessongs = favoritesdb.values.toList();
   bool isalready = favoritessongs
-      .where((element) => element.songname == dbsongs[index].songname)
-      .isEmpty;
-  if (isalready) {
+      .any((element) => element.id == id);
+    
+  if (!isalready) {
+    Songs song =dbsongs.firstWhere((element) => element.id == id);
     favoritesdb.add(favorites(
-        songname: dbsongs[index].songname,
-        artist: dbsongs[index].artist,
-        duration: dbsongs[index].duration,
-        songurl: dbsongs[index].songurl,
-        id: dbsongs[index].id));
+        songname: song.songname,
+        artist: song.artist,
+        duration: song.duration,
+        songurl: song.songurl,
+        id: song.id));
   } else {
-    favoritessongs
-        .where((element) => element.songname == dbsongs[index].songname)
-        .isEmpty;
+    
     int currentindex =
-        favoritessongs.indexWhere((element) => element.id == dbsongs[index].id);
+        favoritessongs.indexWhere((element) => element.id == id);
     await favoritesdb.deleteAt(currentindex);
   }
 }
 
-removeFav(int index) async {
+ removeFav(int? songid) async {
   final box = SongBox.getInstance();
 
   final boxremove = favoritesbox.getInstance();
   List<favorites> favsong = boxremove.values.toList();
   List<Songs> dbsongs = box.values.toList();
   int currentindex =
-      favsong.indexWhere((element) => element.id == dbsongs[index].id);
+      favsong.indexWhere((element) => element.id == songid);
   await favoritesdb.deleteAt(currentindex);
 }
 
@@ -67,21 +66,22 @@ deleteFav(int index, BuildContext context) async {
   );
 }
 
-bool checkFavStatus(int index, BuildContext) {
+bool checkFavStatus(int? songid, BuildContext) {
   final box = SongBox.getInstance();
 
   List<favorites> favoritessongs = [];
   List<Songs> dbsongs = box.values.toList();
+  Songs song = dbsongs.firstWhere((element) => element.id == songid);
   favorites value = favorites(
-      songname: dbsongs[index].songname,
-      artist: dbsongs[index].artist,
-      duration: dbsongs[index].duration,
-      songurl: dbsongs[index].songurl,
-      id: dbsongs[index].id);
+      songname: song.songname,
+      artist: song.artist,
+      duration: song.duration,
+      songurl: song.songurl,
+      id: song.id);
 
   favoritessongs = favoritesdb.values.toList();
   bool isAlreadyThere = favoritessongs
-      .where((element) => element.songname == value.songname)
+      .where((element) => element.id == value.id)
       .isEmpty;
   return isAlreadyThere ? true : false;
 }

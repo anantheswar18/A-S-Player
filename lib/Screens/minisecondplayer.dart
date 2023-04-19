@@ -49,14 +49,15 @@ class _MiniPlayerState extends State<MiniSecondPlayer> {
                 end: Alignment.bottomCenter,
                 colors: [
                   // buttoncolor,
-                  Color(0xFF000428),
+                 
                   Color.fromARGB(255, 97, 132, 170),
+                   Color(0xFF000428),
                   // Colors.white10,
                 ],
               ),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(50),
-              ),
+              // borderRadius: const BorderRadius.all(
+              //   Radius.circular(50),
+              // ),
             ),
             width: rheight,
             height: rheight * 0.09,
