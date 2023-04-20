@@ -1,3 +1,4 @@
+import 'package:as_player/Functions/lyricsfunction.dart';
 import 'package:as_player/Model/songmodel.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
@@ -30,10 +31,12 @@ class PlayingNow extends StatefulWidget {
 
 class _PlayingNowState extends State<PlayingNow> {
   bool _isFavorite = false;
-  double _sliderValue = 0.5;
+  double _sliderValue = 0.5; 
   var size, height, width;
   bool _isplayed = false;
-  final _audioPlayer = AssetsAudioPlayer.withId('0');
+  final audioPlayer1 = AssetsAudioPlayer.withId('0');
+  // final AssetsAudioPlayer audioPlayer1 = AssetsAudioPlayer.withId('0');
+
   final box = SongBox.getInstance();
   bool isRepeat = false;
   bool isShuffleOn = false;
@@ -83,6 +86,11 @@ class _PlayingNowState extends State<PlayingNow> {
           iconSize: 30,
           color: Colors.white,
         ),
+        actions: [
+          IconButton(onPressed: () {
+            lyricsBottom(context,audioPlayer1.getCurrentAudioTitle,audioPlayer1.getCurrentAudioArtist);
+          }, icon: Icon(Icons.lyrics_outlined))
+        ],
       ),
 
       // Color(0xFF0141e30),Color(0xFF0243b55)
@@ -118,7 +126,7 @@ class _PlayingNowState extends State<PlayingNow> {
                       child: CircularProgressIndicator(),
                     );
                   }
-                  return _audioPlayer.builderCurrent(
+                  return audioPlayer1.builderCurrent(
                     builder: ((context, playing) {
                       return Column(
                         children: [
@@ -162,7 +170,7 @@ class _PlayingNowState extends State<PlayingNow> {
                                         child: SingleChildScrollView(
                                           scrollDirection: Axis.horizontal,
                                           child: TextScroll(
-                                            _audioPlayer.getCurrentAudioTitle,
+                                            audioPlayer1.getCurrentAudioTitle,
                                             intervalSpaces: 50,
                                             style: TextStyle(fontSize: 20),
                                             velocity: Velocity(
@@ -183,9 +191,9 @@ class _PlayingNowState extends State<PlayingNow> {
                                       ),
                                       Padding(
                                         padding:
-                                            EdgeInsets.only(left: width * 0.02),
-                                        child: Text(
-                                          _audioPlayer.getCurrentAudioArtist,
+                                            EdgeInsets.only(left: width * 0.04,right: width*0.04),
+                                        child: TextScroll(
+                                          audioPlayer1.getCurrentAudioArtist,
                                           style: TextStyle(
                                             fontSize: 15,
                                             color:
@@ -229,10 +237,10 @@ class _PlayingNowState extends State<PlayingNow> {
                                                       .audio.audio.metas.id!),
                                                 );
                                                 final snackbar = SnackBar(
-                                                  duration: Duration(seconds: 1),
+                                                  duration:
+                                                      Duration(seconds: 1),
                                                   content: Text(
                                                     "Added to Favorites",
-                                                    
                                                     style: GoogleFonts.kanit(
                                                         color: Colors.white,
                                                         fontSize: 15),
@@ -243,7 +251,7 @@ class _PlayingNowState extends State<PlayingNow> {
                                                       DismissDirection.down,
                                                   elevation: 50,
                                                   padding: EdgeInsets.only(
-                                                       bottom: 30,top: 10),
+                                                      bottom: 30, top: 10),
                                                 );
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(snackbar);
@@ -253,11 +261,11 @@ class _PlayingNowState extends State<PlayingNow> {
                                                   BuildContext)) {
                                                 removeFav(
                                                   int.parse(playing
-                                                      .audio.audio.metas.id!
-                                                      ),
+                                                      .audio.audio.metas.id!),
                                                 );
                                                 final snackbar2 = SnackBar(
-                                                  duration: Duration(seconds: 1),
+                                                  duration:
+                                                      Duration(seconds: 1),
                                                   content: Text(
                                                     "Removed from Favorites",
                                                     style: GoogleFonts.kanit(
@@ -294,10 +302,10 @@ class _PlayingNowState extends State<PlayingNow> {
                                     ],
                                   ),
                                   SizedBox(
-                                    height: height * 0.01,
+                                    height: height * 0.02,
                                   ),
                                   PlayerBuilder.realtimePlayingInfos(
-                                    player: _audioPlayer,
+                                    player: audioPlayer1,
                                     builder: (context, RealtimePlayingInfos) {
                                       duration = RealtimePlayingInfos
                                           .current!.audio.duration;
@@ -312,14 +320,15 @@ class _PlayingNowState extends State<PlayingNow> {
                                           progressBarColor: Colors.white,
                                           thumbColor: Colors.white,
                                           thumbRadius: 5,
-                                          timeLabelPadding: 5,
+                                          timeLabelPadding: 10,
                                           progress: position,
                                           timeLabelTextStyle: const TextStyle(
                                             color: Colors.white,
+                                            
                                           ),
                                           total: duration,
                                           onSeek: (duration) async {
-                                            await _audioPlayer.seek(duration);
+                                            await audioPlayer1.seek(duration);
                                           },
                                         ),
                                       );
@@ -329,9 +338,9 @@ class _PlayingNowState extends State<PlayingNow> {
                               ),
                             ),
                           ),
-                          SizedBox(height: height * 0.02),
+                          SizedBox(height: height * 0.03),
                           PlayerBuilder.isPlaying(
-                            player: _audioPlayer,
+                            player: audioPlayer1,
                             builder: ((context, isPlaying) {
                               return Row(
                                 mainAxisAlignment:
@@ -339,7 +348,7 @@ class _PlayingNowState extends State<PlayingNow> {
                                 children: [
                                   IconButton(
                                     onPressed: () async {
-                                      await _audioPlayer.previous();
+                                      await audioPlayer1.previous();
                                     },
                                     icon: const Icon(
                                         Icons.skip_previous_outlined),
@@ -349,9 +358,9 @@ class _PlayingNowState extends State<PlayingNow> {
                                   IconButton(
                                     onPressed: () async {
                                       if (isPlaying) {
-                                        await _audioPlayer.pause();
+                                        await audioPlayer1.pause();
                                       } else {
-                                        await _audioPlayer.play();
+                                        await audioPlayer1.play();
                                       }
                                       _playpause();
                                     },
@@ -363,7 +372,7 @@ class _PlayingNowState extends State<PlayingNow> {
                                   ),
                                   IconButton(
                                     onPressed: () async {
-                                      await _audioPlayer.next();
+                                      await audioPlayer1.next();
                                     },
                                     icon: const Icon(Icons.skip_next_outlined),
                                     iconSize: 50,
@@ -548,7 +557,7 @@ class _PlayingNowState extends State<PlayingNow> {
                   Overlay.of(context),
                   CustomSnackBar.info(
                     message: "Added to Playlist",
-                    backgroundColor:       Color.fromARGB(255, 97, 132, 170),
+                    backgroundColor: Color.fromARGB(255, 97, 132, 170),
                   ));
 
               // log("added to${playlistsong[indexe].playlistName!}");

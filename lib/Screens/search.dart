@@ -45,120 +45,146 @@ class _SearchScreenState extends State<SearchScreen> {
     height = size.height;
     width = size.width;
     return Scaffold(
-      body: Stack(children: [
-        Container(
-          // height: height,
+      // appBar: AppBar(
+      //   backgroundColor: Colors.transparent,
+      //   title: Text(
+      //     "Playing Now ",
+      //     style: GoogleFonts.lato(
+      //         textStyle: Theme.of(context).textTheme.bodyLarge,
+      //         fontSize: 30,
+      //         color: Colors.white),
+      //   ),
+      //   leading: IconButton(
+      //     onPressed: () {
+      //       Navigator.of(context).pop();
+      //     },
+      //     icon: const Icon(Icons.arrow_back_ios_new_outlined),
+      //     iconSize: 30,
+      //     color: Colors.white,
+      //   ),
+      //   actions: [
+      //     IconButton(onPressed: () {}, icon: Icon(Icons.lyrics_outlined))
+      //   ],
+      // ),
+      body: Container(
+        height: height,
 
-          width: width,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF000428),
-                Color.fromARGB(255, 97, 132, 170),
-              ],
-            ),
+        width: width,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF000428),
+              Color.fromARGB(255, 97, 132, 170),
+            ],
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding:
-                      EdgeInsets.only(top: height * 0.09, right: width * 0.4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.arrow_back_ios_new,
-                            size: 30,
-                            color: Colors.white,
-                          )),
-                      Text(
-                        "Search ",
-                        style: GoogleFonts.lato(
-                            textStyle: Theme.of(context).textTheme.bodyLarge,
-                            fontSize: 40,
-                            color: Colors.white),
-                      ),
-                    ],
-                  ),
+        ),
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              Padding(
+                padding:
+                    EdgeInsets.only(top: height * 0.07, right: width * 0.4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    // IconButton(
+                    //     onPressed: () {},
+                    //     icon: const Icon(
+                    //       Icons.arrow_back_ios_new,
+                    //       size: 30,
+                    //       color: Colors.white,
+                    //     )),
+                    Text(
+                      "Search ",
+                      style: GoogleFonts.lato(
+                          textStyle: Theme.of(context).textTheme.bodyLarge,
+                          fontSize: 40,
+                          color: Colors.white),
+                    ),
+                  ],
                 ),
-                searchBox(),
-                SizedBox(
+              ),
+              searchBox(),
+              Padding(
+                padding:  EdgeInsets.only(bottom: height* 0.10),
+                child: SizedBox(
                     height: height,
                     child: ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: another.length,
                         itemBuilder: (context, index) {
-                          return Slidable(
-                              closeOnScroll: true,
-                              useTextDirection: true,
-                              endActionPane: ActionPane(
-                                  motion: const StretchMotion(),
-                                  children: [
-                                    SlidableAction(
-                                      borderRadius: BorderRadius.circular(20),
-                                      padding: EdgeInsets.only(
-                                          top: height * 0.02,
-                                          left: width * 0.05,
-                                          right: width * 0.05),
-                                      autoClose: false,
-                                      onPressed: (context) {
-                                        return _onDismised();
-                                      },
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 97, 132, 170),
-                                      icon: Icons.playlist_add,
-                                      label: 'Add To Playlist',
-                                    )
-                                  ]),
-                              startActionPane: ActionPane(
-                                  motion: const StretchMotion(),
-                                  children: [
-                                    SlidableAction(
-                                      borderRadius: BorderRadius.circular(20),
-                                      padding: EdgeInsets.only(
-                                          top: height * 0.02,
-                                          left: width * 0.05,
-                                          right: width * 0.05),
-                                      autoClose: true,
-                                      onPressed: (context) {
-                                        return _onDismised();
-                                      },
-                                      backgroundColor: Colors.red,
-                                      icon: Icons.favorite_border_outlined,
-                                      label: 'Add To Favorite',
-                                    )
-                                  ]),
-                              child: con(index));
-                        }))
-                // Container(
-                //   height: height,
-                //   child: con(),
-                // )
-                // ListView.separated(itemBuilder: (context,index){
-                //   return ListTile(
-                //     leading: Image.asset('assets/images/NightChanges.jpeg',),
-                //     title: Text("One Direction"),
-                //   );
-                // }, separatorBuilder: (context,index){
-                //   return Divider();
-                // }, itemCount: 10)
-              ],
-            ),
+                          return  con(index);
+                          // return Slidable(
+                              // closeOnScroll: true,
+                              // useTextDirection: true,
+                              // endActionPane: ActionPane(
+                              //     motion: const StretchMotion(),
+                              //     children: [
+                              //       // SlidableAction(
+                              //       //   borderRadius: BorderRadius.circular(20),
+                              //       //   padding: EdgeInsets.only(
+                              //       //       top: height * 0.02,
+                              //       //       left: width * 0.05,
+                              //       //       right: width * 0.05),
+                              //       //   autoClose: false,
+                              //       //   onPressed: (context) {
+                              //       //     return _onDismised();
+                              //       //   },
+                              //       //   backgroundColor: const Color.fromARGB(
+                              //       //       255, 97, 132, 170),
+                              //       //   icon: Icons.playlist_add,
+                              //       //   label: 'Add To Playlist',
+                              //       // )
+                              //     ]),
+                              // startActionPane: ActionPane(
+                              //     motion: const StretchMotion(),
+                              //     children: [
+                              //       SlidableAction(
+                              //         borderRadius: BorderRadius.circular(20),
+                              //         padding: EdgeInsets.only(
+                              //             top: height * 0.02,
+                              //             left: width * 0.05,
+                              //             right: width * 0.05),
+                              //         autoClose: true,
+                              //         onPressed: (context) {
+                              //           return _onDismised();
+                              //         },
+                              //         backgroundColor: Colors.red,
+                              //         icon: Icons.favorite_border_outlined,
+                              //         label: 'Add To Favorite',
+                              //       )
+                              // //     ]),
+                              // child: con(index)
+                              // );
+                        })),
+              )
+              // Container(
+              //   height: height,
+              //   child: con(),
+              // )
+              // ListView.separated(itemBuilder: (context,index){
+              //   return ListTile(
+              //     leading: Image.asset('assets/images/NightChanges.jpeg',),
+              //     title: Text("One Direction"),
+              //   );
+              // }, separatorBuilder: (context,index){
+              //   return Divider();
+              // }, itemCount: 10)
+            ],
           ),
         ),
-      ]),
+      ),
     );
   }
 
   Widget searchBox() {
     return Padding(
-      padding: EdgeInsets.all(height * 0.050),
+      padding: EdgeInsets.only(top: height*0.06,left: width*0.090,right: width*0.090),
       child: TextFormField(
+        
         onTapOutside: (event) {
           FocusScope.of(context).requestFocus(FocusNode());
         },
@@ -247,6 +273,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 boxShadow: const [
                   BoxShadow(
                     blurRadius: 15,
+                    // spreadRadius: 2,
+                    
+                   
                   )
                 ]),
             child: ListTile(
@@ -264,7 +293,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 keepOldArtwork: true,
                 artworkBorder: BorderRadius.circular(10),
                 nullArtworkWidget: ClipRRect(
-                  child: Image.asset('assets/images/NightChanges.jpeg'),
+                  child: Image.asset('assets/images/AS player Logo png.png'),
                 ),
               ),
               title: TextScroll(
@@ -276,9 +305,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 velocity: Velocity(pixelsPerSecond: Offset(100, 0)),
                 intervalSpaces: 50,
               ),
-              subtitle: Text(
+              subtitle: TextScroll(
                 another[index].artist ?? "No Artist",
-                overflow: TextOverflow.ellipsis,
+                // overflow: TextOverflow.ellipsis,
                 style: TextStyle(color: Colors.grey),
               ),
             )),

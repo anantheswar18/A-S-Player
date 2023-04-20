@@ -1,4 +1,5 @@
 import 'package:as_player/Screens/home.dart';
+import 'package:as_player/Screens/minisecondplayer.dart';
 import 'package:as_player/Screens/playingnow.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class _MostPlayedState extends State<MostPlayedScreen> {
     for (var items in mostfinalsong) {
       songs.add(Audio.file(items.songurl!,
           metas: Metas(
-              title: items.songname, 
+              title: items.songname,
               artist: items.artist,
               id: items.id.toString())));
     }
@@ -50,6 +51,7 @@ class _MostPlayedState extends State<MostPlayedScreen> {
     height = size.height;
     width = size.width;
     return Scaffold(
+      bottomSheet: MiniSecondPlayer(),
       appBar: AppBar(
         toolbarHeight: height * 0.08,
         backgroundColor: Color(0xFF000428),
@@ -85,6 +87,7 @@ class _MostPlayedState extends State<MostPlayedScreen> {
           ),
         ),
         child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             children: [
               // Padding(
@@ -168,17 +171,20 @@ class _MostPlayedState extends State<MostPlayedScreen> {
                     List<MostPlayed> mostplayedsongs =
                         mostplayedDB.values.toList();
                     return mostfinalsong.isNotEmpty
-                        ? (GridView.builder(
-                            primary: false,
-                            shrinkWrap: true,
-                            itemCount: mostfinalsong.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    mainAxisSpacing: 5.0, crossAxisCount: 2),
-                            itemBuilder: (context, index) {
-                              return sqr(index);
-                            },
-                          ))
+                        ? Padding(
+                            padding: EdgeInsets.only(bottom: height * 0.1),
+                            child: (GridView.builder(
+                              primary: false,
+                              shrinkWrap: true,
+                              itemCount: mostfinalsong.length,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      mainAxisSpacing: 5.0, crossAxisCount: 2),
+                              itemBuilder: (context, index) {
+                                return sqr(index);
+                              },
+                            )),
+                          )
                         : Padding(
                             padding: EdgeInsets.only(top: height * 0.3),
                             child: Text(
@@ -240,14 +246,14 @@ class _MostPlayedState extends State<MostPlayedScreen> {
         // Text(
         //   "Night Changes ",
         //   style: GoogleFonts.lato(
-        //       textStyle: Theme.of(context).textTheme.bodyLarge, 
+        //       textStyle: Theme.of(context).textTheme.bodyLarge,
         //       color: Colors.white),
         // ),
         Padding(
-          padding:  EdgeInsets.only(left: width * 0.05, right: width * 0.05),
+          padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
           child: TextScroll(
             mostfinalsong[index].artist!,
-           style: TextStyle(fontSize: 10,color: Colors.white60),
+            style: TextStyle(fontSize: 10, color: Colors.white60),
           ),
         ),
       ],

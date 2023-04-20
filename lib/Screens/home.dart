@@ -12,6 +12,7 @@ import 'package:as_player/Screens/playingnow.dart';
 import 'package:as_player/Screens/playlist.dart';
 import 'package:as_player/Screens/playlistinside.dart';
 import 'package:as_player/Screens/recentlyply.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -246,7 +247,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: height * 0.10),
+                  padding: EdgeInsets.only(bottom: height * 0.2),
                   child: SizedBox(
                       child: ValueListenableBuilder<Box<Songs>>(
                     valueListenable: songbox.listenable(),
@@ -426,9 +427,17 @@ class _HomePageState extends State<HomePage> {
       height: height * 0.06,
       child: ElevatedButton.icon(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const RecentlyPlayedScreen(),
-          ));
+          // Navigator.of(context).push(MaterialPageRoute(
+          //   builder: (context) => const RecentlyPlayedScreen(),
+          // ));
+           Navigator.push(
+                context,
+                CupertinoPageRoute(
+             
+                  fullscreenDialog: true,
+                  // allowSnapshotting: true,
+                  builder: (context) => RecentlyPlayedScreen(),
+                ));
         },
         icon: Icon(
           Icons.keyboard_arrow_down_rounded,
@@ -438,7 +447,7 @@ class _HomePageState extends State<HomePage> {
         style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(100)),
-            backgroundColor: Color.fromARGB(255, 19, 45, 68)),
+            backgroundColor: Color.fromARGB(255, 8, 29, 48)),
       ),
     );
   }
@@ -449,8 +458,16 @@ class _HomePageState extends State<HomePage> {
       height: height * 0.06,
       child: ElevatedButton.icon(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const MostPlayedScreen()));
+          // Navigator.of(context).push(MaterialPageRoute(
+          //     builder: (context) => const MostPlayedScreen()));
+          Navigator.push(
+                context,
+                CupertinoPageRoute(
+             
+                  fullscreenDialog: true,
+                  // allowSnapshotting: true,
+                  builder: (context) => MostPlayedScreen(),
+                ));
         },
         icon: Icon(
           Icons.keyboard_arrow_down_rounded,

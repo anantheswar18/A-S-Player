@@ -33,31 +33,31 @@ class _MiniPlayerState extends State<MiniSecondPlayer> {
                 ));
           },
           child: Container(
-            
             decoration: BoxDecoration(
               // shape:BoxShape.circle,border: Border.all(),
               boxShadow: [
                 BoxShadow(
                   spreadRadius: 20,
-                    color: const Color(0xFF091227),
-                    blurRadius: 50,
-                    blurStyle: BlurStyle.normal,
-                    )
+                  color: const Color(0xFF091227),
+                  blurRadius: 50,
+                  blurStyle: BlurStyle.normal,
+                )
               ],
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
                   // buttoncolor,
-                 
+
                   Color.fromARGB(255, 97, 132, 170),
-                   Color(0xFF000428),
+                  Color(0xFF000428),
                   // Colors.white10,
                 ],
               ),
               // borderRadius: const BorderRadius.all(
-              //   Radius.circular(50),
+              //   Radius.circular(20),
               // ),
+              // borderRadius: BorderRadius.only(topLeft: Radius.circular(20),bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20),topRight: Radius.circular(20))
             ),
             width: rheight,
             height: rheight * 0.09,
@@ -65,8 +65,8 @@ class _MiniPlayerState extends State<MiniSecondPlayer> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  // width: rheight * 0.01,
-                ),
+                    // width: rheight * 0.01,
+                    ),
                 QueryArtworkWidget(
                   // quality: 1000,
                   id: int.parse(playing.audio.audio.metas.id!),
@@ -93,48 +93,45 @@ class _MiniPlayerState extends State<MiniSecondPlayer> {
                       TextScroll(
                         audioPlayer.getCurrentAudioTitle,
                       ),
-                      TextScroll(
-                        audioPlayer.getCurrentAudioArtist 
-                        // == "<unknown>"
-                            // ? 'Artist Not Found'
-                            // : audioPlayer.getCurrentAudioArtist,
-                      ),
+                      TextScroll(audioPlayer.getCurrentAudioArtist
+                          // == "<unknown>"
+                          // ? 'Artist Not Found'
+                          // : audioPlayer.getCurrentAudioArtist,
+                          ),
                     ],
                   ),
                 ),
                 PlayerBuilder.isPlaying(
                   player: audioPlayer,
                   builder: (context, isPlaying) => Wrap(
-                    // spacing: 5,
-                    // crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                    IconButton(
-                        onPressed: () {
-                          audioPlayer.previous();
-                        },
-                        icon: const Icon(Icons.skip_previous)),
-                    IconButton(
-                        onPressed: () {
-                          audioPlayer.playOrPause();
-                          setState(() {
-                            isPlaying != isPlaying;
-                          });
-                        },
-                        icon:
-                            Icon((isPlaying) ? Icons.pause : Icons.play_arrow)),
-                    IconButton(
-                        onPressed: () {
-                          audioPlayer.next();
-                        },
-                        icon: const Icon(Icons.skip_next)),
-                  ]),
+                      // spacing: 5,
+                      // crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              audioPlayer.previous();
+                            },
+                            icon: const Icon(Icons.skip_previous)),
+                        IconButton(
+                            onPressed: () {
+                              audioPlayer.playOrPause();
+                              setState(() {
+                                isPlaying != isPlaying;
+                              });
+                            },
+                            icon: Icon(
+                                (isPlaying) ? Icons.pause : Icons.play_arrow)),
+                        IconButton(
+                            onPressed: () {
+                              audioPlayer.next();
+                            },
+                            icon: const Icon(Icons.skip_next)),
+                      ]),
                 ),
               ],
             ),
-            
           ),
         );
-        
       },
     );
   }

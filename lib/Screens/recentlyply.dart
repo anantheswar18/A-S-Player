@@ -46,10 +46,7 @@ class _RecentlyPlayedScreenState extends State<RecentlyPlayedScreen> {
     height = size.height;
     width = size.width;
     return Scaffold(
-      floatingActionButton: Padding(
-        padding:  EdgeInsets.only(left: width*0.065),
-        child: MiniSecondPlayer(),
-      ),
+      bottomSheet: MiniSecondPlayer(),
       // bottomSheet: MiniPlayerScreen(),
       appBar: AppBar(
         toolbarHeight: height * 0.08,
@@ -86,7 +83,7 @@ class _RecentlyPlayedScreenState extends State<RecentlyPlayedScreen> {
           ),
         ),
         child: SingleChildScrollView(
-          // physics: NeverScrollableScrollPhysics(),
+          physics: BouncingScrollPhysics(),
           child: Column(
             children: [
               // Padding(
@@ -185,16 +182,19 @@ class _RecentlyPlayedScreenState extends State<RecentlyPlayedScreen> {
                   List<RecentlyPlayed> Recentplayed =
                       RecentDB.values.toList().reversed.toList();
                   return Recentplayed.isNotEmpty
-                      ? GridView.builder(
-                          primary: false,
-                          shrinkWrap: true,
-                          itemCount: Recentplayed.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  mainAxisSpacing: 5.0, crossAxisCount: 2),
-                          itemBuilder: (context, index) {
-                            return sqr(index, Recentplayed);
-                          })
+                      ? Padding(
+                        padding:  EdgeInsets.only(bottom:height*0.1 ),
+                        child: GridView.builder(
+                            primary: false,
+                            shrinkWrap: true,
+                            itemCount: Recentplayed.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    mainAxisSpacing: 5.0, crossAxisCount: 2),
+                            itemBuilder: (context, index) {
+                              return sqr(index, Recentplayed);
+                            }),
+                      )
                       : Padding(
                           padding: EdgeInsets.only(top: height * 0.3),
                           child: Text(
