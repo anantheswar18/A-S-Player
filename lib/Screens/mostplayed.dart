@@ -42,8 +42,9 @@ class _MostPlayedState extends State<MostPlayedScreen> {
     }
     super.initState();
   }
-
   List<MostPlayed> mostfinalsong = [];
+    
+
   var size, height, width;
   @override
   Widget build(BuildContext context) {
@@ -240,6 +241,7 @@ class _MostPlayedState extends State<MostPlayedScreen> {
             padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
             child: TextScroll(
               mostfinalsong[index].songname!,
+              style: TextStyle(color: Colors.white),
             ),
           ),
         ),

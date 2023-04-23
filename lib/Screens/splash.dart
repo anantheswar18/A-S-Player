@@ -18,7 +18,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final _audioQuery = new OnAudioQuery();
+  final audioQuerysplash = new OnAudioQuery();
   final box = SongBox.getInstance();
   // final mostbox = MostPlayedBox.getInstance();
 
@@ -37,11 +37,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void requestpermission() async {
     // Permission.storage.request();
 
-    bool permissionstatus = await _audioQuery.permissionsStatus();
+    bool permissionstatus = await audioQuerysplash.permissionsStatus();
     if (!permissionstatus) {
-      await _audioQuery.permissionsRequest();
+      await audioQuerysplash.permissionsRequest();
 
-      fetchSongs = await _audioQuery.querySongs();
+      fetchSongs = await audioQuerysplash.querySongs();
       for (var element in fetchSongs) {
         if (element.fileExtension == "mp3") {
           allSongs.add(element);

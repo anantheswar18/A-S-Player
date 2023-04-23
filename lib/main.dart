@@ -36,7 +36,6 @@ Future main() async {
   Hive.registerAdapter(MostPlayedAdapter());
   openmostplayeddatabase();
 
-
   runApp(const MyApp());
 }
 
@@ -46,12 +45,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      darkTheme: ThemeData.dark(),
+      // darkTheme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        primaryColor: Colors.white,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
 
-          // primarySwatch:  Colors.transparent
-          ),
+        // primarySwatch:  Colors.transparent
+      ),
       home: const SplashScreen(),
     );
   }

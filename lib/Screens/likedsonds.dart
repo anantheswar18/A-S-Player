@@ -229,6 +229,7 @@ class _LikedSongsState extends State<LikedSongs> {
             ),
             title: TextScroll(
               songname,
+              style: TextStyle(color: Colors.white),
               intervalSpaces: 10,
               velocity: Velocity(pixelsPerSecond: Offset(50, 0)),
             ),

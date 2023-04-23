@@ -6,6 +6,7 @@ import 'package:as_player/Model/favorite.dart';
 import 'package:as_player/Model/mostplayeddb.dart';
 import 'package:as_player/Model/recentlyplayed.dart';
 import 'package:as_player/Model/songmodel.dart';
+import 'package:as_player/Screens/Cards.dart';
 import 'package:as_player/Screens/miniplayer.dart';
 import 'package:as_player/Screens/mostplayed.dart';
 import 'package:as_player/Screens/playingnow.dart';
@@ -130,107 +131,110 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 SizedBox(height: height * 0.15),
-                Padding(
-                  padding: EdgeInsets.only(right: width * 0.3),
-                  child: Text(
-                    "Recently Played ",
-                    style: GoogleFonts.lato(
-                        textStyle: Theme.of(context).textTheme.bodyLarge,
-                        fontSize: 30,
-                        color: Colors.white),
-                  ),
-                ),
+
+                CardsHome(),
+                SizedBox(height: height * 0.02),
+                // Padding(
+                //   padding: EdgeInsets.only(right: width * 0.3),
+                //   child: Text(
+                //     "Recently Played ",
+                //     style: GoogleFonts.lato(
+                //         textStyle: Theme.of(context).textTheme.bodyLarge,
+                //         fontSize: 30,
+                //         color: Colors.white),
+                //   ),
+                // ),
                 // SizedBox(
                 //   height: height * 0.01,
                 // ),
-                Column(
-                  children: [
-                    ValueListenableBuilder<Box<RecentlyPlayed>>(
-                      valueListenable: boxrecent.listenable(),
-                      builder: (context, Box<RecentlyPlayed> RecentDB, child) {
-                        List<RecentlyPlayed> Recentplayed =
-                            RecentDB.values.toList().reversed.toList();
-                        return Recentplayed.isNotEmpty
-                            ? GridView.builder(
-                                padding: EdgeInsets.only(top: height * 0.03),
-                                // scrollDirection: Axis.horizontal,
-                                shrinkWrap: true,
-                                primary: false,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                ),
-                                itemCount: Recentplayed.length == 1
-                                    ? Recentplayed.length
-                                    : 2,
-                                itemBuilder: (context, index) {
-                                  return sqr2(index, Recentplayed);
-                                },
-                              )
-                            : Center(
-                                child: Text(
-                                  "You Have't played any songs",
-                                  style: GoogleFonts.kanit(color: Colors.white),
-                                ),
-                                heightFactor: height * 0.01,
-                              );
-                      },
-                    ),
-                    SizedBox(height: height * 0.01),
-                    navRecently()
-                  ], 
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.only(top: height * 0.01, right: width * 0.4),
-                  child: Text(
-                    "Mostly Played ",
-                    style: GoogleFonts.lato(
-                        textStyle: Theme.of(context).textTheme.bodyLarge,
-                        fontSize: 30,
-                        color: Colors.white),
-                  ),
-                ),
+                // Column(
+                //   children: [
+                //     ValueListenableBuilder<Box<RecentlyPlayed>>(
+                //       valueListenable: boxrecent.listenable(),
+                //       builder: (context, Box<RecentlyPlayed> RecentDB, child) {
+                //         List<RecentlyPlayed> Recentplayed =
+                //             RecentDB.values.toList().reversed.toList();
+                //         return Recentplayed.isNotEmpty
+                //             ? GridView.builder(
+                //                 padding: EdgeInsets.only(top: height * 0.03),
+                //                 // scrollDirection: Axis.horizontal,
+                //                 shrinkWrap: true,
+                //                 primary: false,
+                //                 gridDelegate:
+                //                     SliverGridDelegateWithFixedCrossAxisCount(
+                //                   crossAxisCount: 2,
+                //                 ),
+                //                 itemCount: Recentplayed.length == 1
+                //                     ? Recentplayed.length
+                //                     : 2,
+                //                 itemBuilder: (context, index) {
+                //                   return sqr2(index, Recentplayed);
+                //                 },
+                //               )
+                //             : Center(
+                //                 child: Text(
+                //                   "You Have't played any songs",
+                //                   style: GoogleFonts.kanit(color: Colors.white),
+                //                 ),
+                //                 heightFactor: height * 0.01,
+                //               );
+                //       },
+                //     ),
+                //     SizedBox(height: height * 0.01),
+                //     navRecently()
+                //   ],
+                // ),
+                // Padding(
+                //   padding:
+                //       EdgeInsets.only(top: height * 0.01, right: width * 0.4),
+                //   child: Text(
+                //     "Mostly Played ",
+                //     style: GoogleFonts.lato(
+                //         textStyle: Theme.of(context).textTheme.bodyLarge,
+                //         fontSize: 30,
+                //         color: Colors.white),
+                //   ),
+                // ),
 
                 SizedBox(
                   // height: height / 3,
                   width: width,
                   child: Column(
                     children: [
-                      ValueListenableBuilder(
-                        valueListenable: mostbox.listenable(),
-                        builder:
-                            (context, Box<MostPlayed> mostplayedDB, child) {
-                          List<MostPlayed> mostplayedsongs =
-                              mostplayedDB.values.toList();
-                          return mostfinalsonghome.isNotEmpty
-                              ? GridView.builder(
-                                  padding: EdgeInsets.only(top: height * 0.03),
-                                  shrinkWrap: true,
-                                  primary: false,
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2),
-                                  itemBuilder: (context, index) {
-                                    return sqr(index);
-                                  },
-                                  itemCount: mostfinalsonghome.length == 1
-                                      ? mostfinalsonghome.length
-                                      : 2,
-                                )
-                              : Center(
-                                  child: Text(
-                                    "Your most played songs will appear here!",
-                                    style:
-                                        GoogleFonts.kanit(color: Colors.white),
-                                  ),
-                                  heightFactor: height * 0.01,
-                                );
-                        },
-                      ),
+                      // ValueListenableBuilder(
+                      //   valueListenable: mostbox.listenable(),
+                      //   builder:
+                      //       (context, Box<MostPlayed> mostplayedDB, child) {
+                      //     List<MostPlayed> mostplayedsongs =
+                      //         mostplayedDB.values.toList();
+                      //     return mostfinalsonghome.isNotEmpty
+                      //         ? GridView.builder(
+                      //             padding: EdgeInsets.only(top: height * 0.03),
+                      //             shrinkWrap: true,
+                      //             primary: false,
+                      //             gridDelegate:
+                      //                 SliverGridDelegateWithFixedCrossAxisCount(
+                      //                     crossAxisCount: 2),
+                      //             itemBuilder: (context, index) {
+                      //               return sqr(index);
+                      //             },
+                      //             itemCount: mostfinalsonghome.length == 1
+                      //                 ? mostfinalsonghome.length
+                      //                 : 2,
+                      //           )
+                      //         : Center(
+                      //             child: Text(
+                      //               "Your most played songs will appear here!",
+                      //               style:
+                      //                   GoogleFonts.kanit(color: Colors.white),
+                      //             ),
+                      //             heightFactor: height * 0.01,
+                      //           );
+                      //   },
+                      // ),
 
-                      // SizedBox(height: height * 0.01),
-                      navMost(),
+                      SizedBox(height: height * 0.01),
+                      // navMost(),
                       Padding(
                         padding: EdgeInsets.only(
                             top: height * 0.01, right: width * 0.5),
@@ -339,14 +343,15 @@ class _HomePageState extends State<HomePage> {
         SizedBox(height: height * 0.01),
         Center(
           child: Padding(
-            padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
+            padding: EdgeInsets.only(left: width * 0.08, right: width * 0.05),
             child: TextScroll(
               mostfinalsonghome[index].songname!,
+              style: TextStyle(color: Colors.white),
             ),
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
+          padding: EdgeInsets.only(left: width * 0.03, right: width * 0.07),
           child: TextScroll(
             mostfinalsonghome[index].artist!,
             style: TextStyle(fontSize: 10, color: Colors.white60),
@@ -404,6 +409,7 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
             child: TextScroll(
               Recentplayed[index].songname!,
+              style: TextStyle(color: Colors.white),
             ),
           ),
         ),
@@ -430,14 +436,13 @@ class _HomePageState extends State<HomePage> {
           // Navigator.of(context).push(MaterialPageRoute(
           //   builder: (context) => const RecentlyPlayedScreen(),
           // ));
-           Navigator.push(
-                context,
-                CupertinoPageRoute(
-             
-                  fullscreenDialog: true,
-                  // allowSnapshotting: true,
-                  builder: (context) => RecentlyPlayedScreen(),
-                ));
+          Navigator.push(
+              context,
+              CupertinoPageRoute(
+                fullscreenDialog: true,
+                // allowSnapshotting: true,
+                builder: (context) => RecentlyPlayedScreen(),
+              ));
         },
         icon: Icon(
           Icons.keyboard_arrow_down_rounded,
@@ -461,13 +466,12 @@ class _HomePageState extends State<HomePage> {
           // Navigator.of(context).push(MaterialPageRoute(
           //     builder: (context) => const MostPlayedScreen()));
           Navigator.push(
-                context,
-                CupertinoPageRoute(
-             
-                  fullscreenDialog: true,
-                  // allowSnapshotting: true,
-                  builder: (context) => MostPlayedScreen(),
-                ));
+              context,
+              CupertinoPageRoute(
+                fullscreenDialog: true,
+                // allowSnapshotting: true,
+                builder: (context) => MostPlayedScreen(),
+              ));
         },
         icon: Icon(
           Icons.keyboard_arrow_down_rounded,
@@ -524,6 +528,7 @@ class _HomePageState extends State<HomePage> {
             leading: coverImage,
             title: TextScroll(
               musicname!,
+              style: TextStyle(color: Colors.white),
               intervalSpaces: 10,
               velocity: Velocity(pixelsPerSecond: Offset(50, 0)),
             ),
@@ -533,6 +538,7 @@ class _HomePageState extends State<HomePage> {
             ),
             trailing: PopupMenuButton(
               elevation: 30,
+              color: Colors.white,
               // splashRadius: 10,
               // color: Color.fromARGB(255, 26, 23, 23),
               itemBuilder: (context) => [
@@ -625,7 +631,6 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (context) {
         return Container(
-         
           height: height * 0.7,
           child: SingleChildScrollView(
             child: Column(
@@ -778,11 +783,11 @@ class _HomePageState extends State<HomePage> {
                       playlistsSongs: playsongDB));
               Navigator.of(context).pop();
               log("added to${playlistsong[indexe].playlistName!}");
-               showTopSnackBar(
+              showTopSnackBar(
                   Overlay.of(context),
                   CustomSnackBar.info(
                     message: "Added to Playlist",
-                    backgroundColor:       Color.fromARGB(255, 97, 132, 170),
+                    backgroundColor: Color.fromARGB(255, 97, 132, 170),
                   ));
             },
             leading: ClipRRect(

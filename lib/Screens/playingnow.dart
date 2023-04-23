@@ -34,7 +34,7 @@ class _PlayingNowState extends State<PlayingNow> {
   double _sliderValue = 0.5; 
   var size, height, width;
   bool _isplayed = false;
-  final audioPlayer1 = AssetsAudioPlayer.withId('0');
+  final _audioPlayer = AssetsAudioPlayer.withId('0');
   // final AssetsAudioPlayer audioPlayer1 = AssetsAudioPlayer.withId('0');
 
   final box = SongBox.getInstance();
@@ -88,7 +88,7 @@ class _PlayingNowState extends State<PlayingNow> {
         ),
         actions: [
           IconButton(onPressed: () {
-            lyricsBottom(context,audioPlayer1.getCurrentAudioTitle,audioPlayer1.getCurrentAudioArtist);
+            lyricsBottom(context,_audioPlayer.getCurrentAudioTitle,_audioPlayer.getCurrentAudioArtist);
           }, icon: Icon(Icons.lyrics_outlined))
         ],
       ),
@@ -126,7 +126,7 @@ class _PlayingNowState extends State<PlayingNow> {
                       child: CircularProgressIndicator(),
                     );
                   }
-                  return audioPlayer1.builderCurrent(
+                  return _audioPlayer.builderCurrent(
                     builder: ((context, playing) {
                       return Column(
                         children: [
@@ -170,9 +170,9 @@ class _PlayingNowState extends State<PlayingNow> {
                                         child: SingleChildScrollView(
                                           scrollDirection: Axis.horizontal,
                                           child: TextScroll(
-                                            audioPlayer1.getCurrentAudioTitle,
+                                            _audioPlayer.getCurrentAudioTitle,
                                             intervalSpaces: 50,
-                                            style: TextStyle(fontSize: 20),
+                                            style: TextStyle(fontSize: 20,color: Colors.white),
                                             velocity: Velocity(
                                                 pixelsPerSecond:
                                                     Offset(100, 0)),
@@ -193,7 +193,7 @@ class _PlayingNowState extends State<PlayingNow> {
                                         padding:
                                             EdgeInsets.only(left: width * 0.04,right: width*0.04),
                                         child: TextScroll(
-                                          audioPlayer1.getCurrentAudioArtist,
+                                          _audioPlayer.getCurrentAudioArtist,
                                           style: TextStyle(
                                             fontSize: 15,
                                             color:
@@ -305,7 +305,7 @@ class _PlayingNowState extends State<PlayingNow> {
                                     height: height * 0.02,
                                   ),
                                   PlayerBuilder.realtimePlayingInfos(
-                                    player: audioPlayer1,
+                                    player: _audioPlayer,
                                     builder: (context, RealtimePlayingInfos) {
                                       duration = RealtimePlayingInfos
                                           .current!.audio.duration;
@@ -328,7 +328,7 @@ class _PlayingNowState extends State<PlayingNow> {
                                           ),
                                           total: duration,
                                           onSeek: (duration) async {
-                                            await audioPlayer1.seek(duration);
+                                            await _audioPlayer.seek(duration);
                                           },
                                         ),
                                       );
@@ -340,7 +340,7 @@ class _PlayingNowState extends State<PlayingNow> {
                           ),
                           SizedBox(height: height * 0.03),
                           PlayerBuilder.isPlaying(
-                            player: audioPlayer1,
+                            player: _audioPlayer,
                             builder: ((context, isPlaying) {
                               return Row(
                                 mainAxisAlignment:
@@ -348,7 +348,7 @@ class _PlayingNowState extends State<PlayingNow> {
                                 children: [
                                   IconButton(
                                     onPressed: () async {
-                                      await audioPlayer1.previous();
+                                      await _audioPlayer.previous();
                                     },
                                     icon: const Icon(
                                         Icons.skip_previous_outlined),
@@ -358,9 +358,9 @@ class _PlayingNowState extends State<PlayingNow> {
                                   IconButton(
                                     onPressed: () async {
                                       if (isPlaying) {
-                                        await audioPlayer1.pause();
+                                        await _audioPlayer.pause();
                                       } else {
-                                        await audioPlayer1.play();
+                                        await _audioPlayer.play();
                                       }
                                       _playpause();
                                     },
@@ -372,7 +372,7 @@ class _PlayingNowState extends State<PlayingNow> {
                                   ),
                                   IconButton(
                                     onPressed: () async {
-                                      await audioPlayer1.next();
+                                      await _audioPlayer.next();
                                     },
                                     icon: const Icon(Icons.skip_next_outlined),
                                     iconSize: 50,

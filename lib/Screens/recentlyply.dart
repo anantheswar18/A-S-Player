@@ -254,6 +254,7 @@ class _RecentlyPlayedScreenState extends State<RecentlyPlayedScreen> {
             padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
             child: TextScroll(
               Recentplayed[index].songname!,
+              style: TextStyle(color: Colors.white),
             ),
           ),
         ),

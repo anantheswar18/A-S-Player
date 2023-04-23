@@ -57,7 +57,7 @@ class _SnakeNavbarScreenState extends State<SnakeNavbarScreen> {
       extendBody: true,
       extendBodyBehindAppBar: true,
       bottomNavigationBar: SnakeNavigationBar.color(
-        behaviour: SnakeBarBehaviour.pinned,
+        behaviour: SnakeBarBehaviour.floating,
         backgroundColor: const Color(0xFF091227), 
         snakeShape: snakeShape,
         shape: const RoundedRectangleBorder(
