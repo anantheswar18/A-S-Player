@@ -417,7 +417,7 @@ class _PlayingNowState extends State<PlayingNow> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: height * 0.01),
-                  child: Text("Add To Playlist"),
+                  child: Text("Add To Playlist",style: TextStyle(color: Color.fromARGB(255, 192, 189, 189)),),
                 ),
 
                 ElevatedButton(

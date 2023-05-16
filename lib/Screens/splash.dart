@@ -29,12 +29,11 @@ class _SplashScreenState extends State<SplashScreen> {
   //   super.initState();
   // }
   void initState() {
-    requestpermission();
-
     super.initState();
+    requestpermission();
   }
 
-  void requestpermission() async {
+   requestpermission() async {
     // Permission.storage.request();
 
     bool permissionstatus = await audioQuerysplash.permissionsStatus();

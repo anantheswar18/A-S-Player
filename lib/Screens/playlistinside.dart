@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:as_player/Model/playlistmodel.dart';
 import 'package:as_player/Model/songmodel.dart';
+import 'package:as_player/Screens/minisecondplayer.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -223,6 +224,7 @@ class _PlaylistInsideState extends State<PlaylistInside> {
           ),
         ),
       ),
+      bottomSheet: MiniSecondPlayer(),
     );
   }
 

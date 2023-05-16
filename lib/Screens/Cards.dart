@@ -27,7 +27,7 @@ class CardsHome extends StatelessWidget {
       physics: BouncingScrollPhysics(),
       scrollDirection: Axis.horizontal,
       child: SizedBox(
-          width: heigth * 0.800,
+          width: heigth * 0.900,
           child: Row(
             // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -106,8 +106,9 @@ class CardsHome extends StatelessWidget {
           ),
         ),
         Positioned(
-            right: width * 0.04,
+            right: width * 0.05,
             top: width*0.35,
+            
             child: Container(
               height: width*0.15,
               width: width * 0.40,

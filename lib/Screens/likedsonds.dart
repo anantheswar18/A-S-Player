@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:as_player/Functions/addToFavorite.dart';
 import 'package:as_player/Model/songmodel.dart';
 import 'package:as_player/Screens/home.dart';
+import 'package:as_player/Screens/miniplayer.dart';
+import 'package:as_player/Screens/minisecondplayer.dart';
 import 'package:as_player/Screens/playingnow.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
@@ -182,12 +184,19 @@ class _LikedSongsState extends State<LikedSongs> {
                               itemCount: favitemsongs.length,
                             ),
                           )
-                        : Center(child: Text("You haven't liked any Songs"),heightFactor: height*0.05);
+                        : Center(
+                            child: Text(
+                              "You haven't liked any Songs",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            heightFactor: height * 0.05,
+                          );
                   }),
             ],
           ),
         ),
       ),
+      bottomSheet: MiniSecondPlayer(),
     );
   }
 
@@ -245,7 +254,7 @@ class _LikedSongsState extends State<LikedSongs> {
               style: TextStyle(color: Colors.grey),
             ),
             trailing: IconButton(
-                onPressed: ()  {
+                onPressed: () {
                   deleteFav(index, context);
                   //  refresh();
 
@@ -269,14 +278,14 @@ class _LikedSongsState extends State<LikedSongs> {
   }
 
   refresh() {
-     final favsongsdb = Hive.box<favorites>(boxname3).values.toList();
-      for (var item in favsongsdb) {
-        allsongs.add(Audio.file(item.songurl.toString(),
-            metas: Metas(
-                artist: item.artist,
-                title: item.songname,
-                id: item.id.toString())));
-      }
+    final favsongsdb = Hive.box<favorites>(boxname3).values.toList();
+    for (var item in favsongsdb) {
+      allsongs.add(Audio.file(item.songurl.toString(),
+          metas: Metas(
+              artist: item.artist,
+              title: item.songname,
+              id: item.id.toString())));
+    }
     // final List<favorites> favitemsongs = box.values.toList().reversed.toList();
     // for (var item in favitemsongs) {
     //   favsong.add(Audio.file(item.songurl.toString(),
