@@ -168,7 +168,7 @@ class _SettingsState extends State<Settings> {
             // ),
             InkWell(
               onTap: () {
-                Share.share("https://github.com/anantheswar18/A-S-Player.git",
+                Share.share("https://play.google.com/store/apps/details?id=apps.musicplayer.as_player",
                     subject: "A S Music Player");
               },
               child: items(
