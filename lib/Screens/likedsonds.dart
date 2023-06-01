@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:as_player/Functions/addToFavorite.dart';
 import 'package:as_player/Model/songmodel.dart';
 import 'package:as_player/Screens/home.dart';
-import 'package:as_player/Screens/miniplayer.dart';
 import 'package:as_player/Screens/minisecondplayer.dart';
 import 'package:as_player/Screens/playingnow.dart';
+import 'package:as_player/state_management/favoriteMangement.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -14,40 +14,37 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 import 'package:text_scroll/text_scroll.dart';
 
 import '../Model/favorite.dart';
 
-class LikedSongs extends StatefulWidget {
-  const LikedSongs({super.key});
+class LikedSongs extends StatelessWidget {
+  LikedSongs({super.key});
 
-  @override
-  State<LikedSongs> createState() => _LikedSongsState();
-}
-
-class _LikedSongsState extends State<LikedSongs> {
   var size, height, width;
   final _audioPlayer = AssetsAudioPlayer.withId('0');
-  final box = favoritesbox.getInstance();
-  List<Audio> favsong = [];
+  // final box = favoritesbox.getInstance();
+  // List<Audio> favsong = [];
   List<Audio> allsongs = [];
 
-  void initState() {
-    final List<favorites> favitemsongs = box.values.toList().reversed.toList();
-    for (var item in favitemsongs) {
-      favsong.add(Audio.file(item.songurl.toString(),
-          metas: Metas(
-              artist: item.artist,
-              title: item.songname,
-              id: item.id.toString())));
-    }
-    setState(() {
-      super.initState();
-    });
-  }
+  // void initState() {
+  //   final List<favorites> favitemsongs = box.values.toList().reversed.toList();
+  //   for (var item in favitemsongs) {
+  //     favsong.add(Audio.file(item.songurl.toString(),
+  //         metas: Metas(
+  //             artist: item.artist,
+  //             title: item.songname,
+  //             id: item.id.toString())));
+  //   }
+  //   setState(() {
+  //     super.initState();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<FavoriteProvider>(context).FavInit();
     size = MediaQuery.of(context).size;
     height = size.height;
     width = size.width;
@@ -58,10 +55,16 @@ class _LikedSongsState extends State<LikedSongs> {
         // shadowColor: Color.fromARGB(255, 97, 132, 170),
         title: Text(
           "Liked Songs ",
-          style: GoogleFonts.lato(
-              textStyle: Theme.of(context).textTheme.bodyLarge,
-              fontSize: 25,
-              color: Colors.white),
+          // style: GoogleFonts.lato(
+          //     textStyle: Theme.of(context).textTheme.bodyLarge,
+          //     fontSize: 25,
+          //     color: Colors.white),
+          style: TextStyle(
+                  fontSize: 28,
+                  fontFamily: "Inter",
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white
+                ),
         ),
         leading: IconButton(
             onPressed: () {
@@ -91,107 +94,46 @@ class _LikedSongsState extends State<LikedSongs> {
           child: Column(
             children: [
               SizedBox(height: height * 0.01),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //   children: [
-              //     Container(
-              //       decoration: BoxDecoration(
-              //           color: Color.fromARGB(255, 23, 35, 63),
-              //           borderRadius: BorderRadius.circular(50)),
-              //       height: height * 0.07,
-              //       width: width * 0.48,
-              //       child: Row(
-              //         children: [
-              //           SizedBox(
-              //             width: width * 0.01,
-              //           ),
-              //           // IconButton(
-              //           //     onPressed: () {},
-              //           //     icon: const Icon(
-              //           //       Icons.shuffle,
-              //           //       size: 30,
-              //           //       color: Colors.white,
-              //           //     )),
-              //           // SizedBox(
-              //           //   width: width * 0.03,
-              //           // ),
-              //           // Text(
-              //           //   "Shuffle All ",
-              //           //   style: GoogleFonts.lato(
-              //           //       textStyle: Theme.of(context).textTheme.bodyLarge,
-              //           //       fontSize: 23,
-              //           //       color: Colors.white),
-              //           // )
-              //         ],
-              //       ),
-              //     ),
-              //     Container(
-              //       decoration: BoxDecoration(
-              //           color: const Color.fromARGB(255, 23, 35, 63),
-              //           borderRadius: BorderRadius.circular(50)),
-              //       height: height * 0.07,
-              //       width: width * 0.45,
-              //       child: Row(
-              //         children: [
-              //           SizedBox(
-              //             width: width * 0.05,
-              //           ),
-              //           IconButton(
-              //               onPressed: () {
-              //                 Navigator.of(context).push(MaterialPageRoute(
-              //                   builder: (context) => PlayingNow(),
-              //                 ));
-              //               },
-              //               icon: const Icon(
-              //                 Icons.play_circle_fill,
-              //                 size: 40,
-              //                 color: Color.fromARGB(255, 28, 37, 77),
-              //               )),
-              //           SizedBox(
-              //             width: width * 0.03,
-              //           ),
-              //           Text(
-              //             "Play",
-              //             style: GoogleFonts.lato(
-              //                 textStyle: Theme.of(context).textTheme.bodyLarge,
-              //                 fontSize: 25,
-              //                 color: Colors.white),
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              ValueListenableBuilder<Box<favorites>>(
-                  valueListenable: box.listenable(),
-                  builder: (context, Box<favorites> favoritesdb, child) {
-                    // log("hey anantheswara ");
-                    List<favorites> favitemsongs =
-                        favoritesdb.values.toList().reversed.toList();
-                    return favitemsongs.isNotEmpty
+
+              // log("hey anantheswara ");
+              // List<favorites> favitemsongs =
+              //     favoritesdb.values.toList().reversed.toList();
+              Consumer<FavoriteProvider>(
+                builder: (context, value, child) =>
+                    Provider.of<FavoriteProvider>(context)
+                            .favitemsongs
+                            .isNotEmpty
                         ? Container(
                             height: height,
                             child: ListView.builder(
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) => likedList(
-                                  favitemsongs[index].id,
-                                  favitemsongs[index].songname,
-                                  favitemsongs[index].artist,
-                                  index,
-                                  context,
-                                  favoritesdb),
-                              itemCount: favitemsongs.length,
+                                value.favitemsongs[index].id,
+                                value.favitemsongs[index].songname,
+                                value.favitemsongs[index].artist,
+                                index,
+                                context,
+                              ),
+                              itemCount: value.favitemsongs.length,
                             ),
                           )
-                        : Center(
-                            child: Text(
-                              "You haven't liked any Songs",
-                              style: TextStyle(color: Colors.white),
+                        : SizedBox(
+                          width: double.infinity,
+                          child: Padding(
+                            padding:  EdgeInsets.only(top:height/3 ),
+                            child: Column(
+                              children: [
+                                // Image.asset("assets/gif/animation_500_libbj07p.gif"),
+                                Text(
+                                  "You haven't liked any Songs",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
                             ),
-                            heightFactor: height * 0.05,
-                          );
-                  }),
+                          ),
+                        ),
+              ),
             ],
           ),
         ),
@@ -201,7 +143,12 @@ class _LikedSongsState extends State<LikedSongs> {
   }
 
   Widget likedList(
-      favitemsongs, songname, artist, index, context, favoritesdb) {
+    favitemsongs,
+    songname,
+    artist,
+    index,
+    context,
+  ) {
     return Padding(
       padding: EdgeInsets.only(
           top: height * 0.02, left: width * 0.05, right: width * 0.05),
@@ -218,7 +165,10 @@ class _LikedSongsState extends State<LikedSongs> {
           child: ListTile(
             onTap: () {
               refresh();
-              _audioPlayer.open(Playlist(audios: favsong, startIndex: index),
+              _audioPlayer.open(
+                  Playlist(
+                      audios: Provider.of<FavoriteProvider>(context,listen: false).favsong,
+                      startIndex: index),
                   showNotification: true,
                   headPhoneStrategy: HeadPhoneStrategy.pauseOnUnplug,
                   loopMode: LoopMode.playlist);
@@ -242,20 +192,14 @@ class _LikedSongsState extends State<LikedSongs> {
               intervalSpaces: 10,
               velocity: Velocity(pixelsPerSecond: Offset(50, 0)),
             ),
-            // Text(
-            //   songname,
-            //   style: GoogleFonts.aBeeZee(
-            //       textStyle: Theme.of(context).textTheme.bodyLarge,
-            //       fontSize: 15,
-            //       color: Colors.white),
-            // ),
             subtitle: Text(
               artist ?? "<<Unknown>>",
               style: TextStyle(color: Colors.grey),
             ),
             trailing: IconButton(
                 onPressed: () {
-                  deleteFav(index, context);
+                  // deleteFav(index, context);
+                  Provider.of<FavoriteProvider>(context,listen: false).deleteFavProvider(index, context);
                   //  refresh();
 
                   // removeFav(index);

@@ -1,6 +1,7 @@
 import 'package:as_player/Screens/home.dart';
 import 'package:as_player/Screens/minisecondplayer.dart';
 import 'package:as_player/Screens/playingnow.dart';
+import 'package:as_player/state_management/mostPlayedManagement.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/src/widgets/framework.dart';
@@ -9,45 +10,43 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 import 'package:text_scroll/text_scroll.dart';
 
 import '../Model/mostplayeddb.dart';
 
-class MostPlayedScreen extends StatefulWidget {
-  const MostPlayedScreen({super.key});
+class MostPlayedScreen extends StatelessWidget {
+   MostPlayedScreen({super.key});
 
-  @override
-  State<MostPlayedScreen> createState() => _MostPlayedState();
-}
+  
+  // final box = MostPlayedBox.getInstance();
+  // List<Audio> songs = [];
 
-class _MostPlayedState extends State<MostPlayedScreen> {
-  final box = MostPlayedBox.getInstance();
-  List<Audio> songs = [];
-
-  void initState() {
-    List<MostPlayed> songlist = box.values.toList();
-    int i = 0;
-    for (var item in songlist) {
-      if (item.count! > 5) {
-        mostfinalsong.insert(i, item);
-        i++;
-      }
-    }
-    for (var items in mostfinalsong) {
-      songs.add(Audio.file(items.songurl!,
-          metas: Metas(
-              title: items.songname,
-              artist: items.artist,
-              id: items.id.toString())));
-    }
-    super.initState();
-  }
-  List<MostPlayed> mostfinalsong = [];
+  // void initState() {
+  //   List<MostPlayed> songlist = box.values.toList();
+  //   int i = 0;
+  //   for (var item in songlist) {
+  //     if (item.count! > 5) {
+  //       mostfinalsong.insert(i, item);
+  //       i++;
+  //     }
+  //   }
+  //   for (var items in mostfinalsong) {
+  //     songs.add(Audio.file(items.songurl!,
+  //         metas: Metas(
+  //             title: items.songname,
+  //             artist: items.artist,
+  //             id: items.id.toString())));
+  //   }
+  //   super.initState();
+  // }
+  // List<MostPlayed> mostfinalsong = [];
     
 
   var size, height, width;
   @override
   Widget build(BuildContext context) {
+    Provider.of<MostPlayedProvider>(context).mostPlayedInit();
     size = MediaQuery.of(context).size;
     height = size.height;
     width = size.width;
@@ -91,109 +90,36 @@ class _MostPlayedState extends State<MostPlayedScreen> {
           physics: BouncingScrollPhysics(),
           child: Column(
             children: [
-              // Padding(
-              //   padding:
-              //       EdgeInsets.only(top: height * 0.09, right: width * 0.4),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: [
-              //       IconButton(
-              //           onPressed: () {
-              //             Navigator.of(context).pop();
-              //           },
-              //           icon: const Icon(
-              //             Icons.arrow_back_ios_new,
-              //             size: 30,
-              //             color: Colors.white,
-              //           )),
-              //       Text(
-              //         "Most Played ",
-              //         style: GoogleFonts.lato(
-              //             textStyle: Theme.of(context).textTheme.bodyLarge,
-              //             fontSize: 25,
-              //             color: Colors.white),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // StaggeredGridView.countBuilder(
-              //   crossAxisCount: 2,
-              //   itemCount: 10,
-              //   itemBuilder: (context, index) => gcol(index),
-              //   staggeredTileBuilder: (index) =>
-              //       StaggeredTile.count(1, index.isEven ? 2 : 1),
-              //   mainAxisSpacing: 4.0,
-              //   crossAxisSpacing: 4.0,
-              // )
-              // SizedBox(height: height * 0.03),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //   children: [
-              //     sqr(),
-              //     sqr()
-              //   ],
-              // ),
-              //  SizedBox(height: height*0.03),
-              //  Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //   children: [
-              //     sqr(),
-              //     sqr()
-              //   ],
-              // ),
-              // SizedBox(height: height*0.03),
-              //  Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //   children: [
-              //     sqr(),
-              //     sqr()
-              //   ],
-              // ),
-              // SizedBox(height: height*0.03),
-              //  Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //   children: [
-              //     sqr(),
-              //     sqr()
-              //   ],
-              // ),
-              // SizedBox(height: height*0.03),
-              //  Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //   children: [
-              //     sqr(),
-              //     sqr()
-              //   ],
-              // ),
+              
               SizedBox(height: height * 0.05),
-              ValueListenableBuilder(
-                  valueListenable: box.listenable(),
-                  builder: (context, Box<MostPlayed> mostplayedDB, child) {
-                    List<MostPlayed> mostplayedsongs =
-                        mostplayedDB.values.toList();
-                    return mostfinalsong.isNotEmpty
-                        ? Padding(
-                            padding: EdgeInsets.only(bottom: height * 0.1),
-                            child: (GridView.builder(
-                              primary: false,
-                              shrinkWrap: true,
-                              itemCount: mostfinalsong.length,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      mainAxisSpacing: 5.0, crossAxisCount: 2),
-                              itemBuilder: (context, index) {
-                                return sqr(index);
-                              },
-                            )),
-                          )
-                        : Padding(
-                            padding: EdgeInsets.only(top: height * 0.3),
-                            child: Text(
-                              "Your most played songs will appear here!",
-                              style: GoogleFonts.kanit(color: Colors.white),
+              
+                    // List<MostPlayed> mostplayedsongs =
+                    //     mostplayedDB.values.toList();
+                     Consumer<MostPlayedProvider>(
+                      builder:(context, value, child) =>  value.mostfinalsong.isNotEmpty
+                          ? Padding(
+                              padding: EdgeInsets.only(bottom: height * 0.1),
+                              child: (GridView.builder(
+                                primary: false,
+                                shrinkWrap: true,
+                                itemCount: value.mostfinalsong.length,
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                        mainAxisSpacing: 5.0, crossAxisCount: 2),
+                                itemBuilder: (context, index) {
+                                  return sqr(index,context);
+                                },
+                              )),
+                            )
+                          : Padding(
+                              padding: EdgeInsets.only(top: height * 0.3),
+                              child: Text(
+                                "Your most played songs will appear here!",
+                                style: GoogleFonts.kanit(color: Colors.white),
+                              ),
                             ),
-                          );
-                  })
+                    ),
+              
             ],
           ),
         ),
@@ -201,12 +127,12 @@ class _MostPlayedState extends State<MostPlayedScreen> {
     );
   }
 
-  Widget sqr(index) {
+  Widget sqr(index,context) {
     return Column(
       children: [
         InkWell(
           onTap: () {
-            audioPlayer.open(Playlist(audios: songs, startIndex: index),
+            audioPlayer.open(Playlist(audios:Provider.of<MostPlayedProvider>(context,listen: false).songs, startIndex: index),
                 headPhoneStrategy: HeadPhoneStrategy.pauseOnUnplugPlayOnPlug,
                 showNotification: true);
             Navigator.of(context).push(MaterialPageRoute(
@@ -223,7 +149,7 @@ class _MostPlayedState extends State<MostPlayedScreen> {
               ],
             ),
             child: QueryArtworkWidget(
-              id: mostfinalsong[index].id!,
+              id: Provider.of<MostPlayedProvider>(context).mostfinalsong[index].id!,
               type: ArtworkType.AUDIO,
               keepOldArtwork: true,
               artworkBorder: BorderRadius.circular(10),
@@ -240,7 +166,7 @@ class _MostPlayedState extends State<MostPlayedScreen> {
           child: Padding(
             padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
             child: TextScroll(
-              mostfinalsong[index].songname!,
+              Provider.of<MostPlayedProvider>(context).mostfinalsong[index].songname!,
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -254,7 +180,7 @@ class _MostPlayedState extends State<MostPlayedScreen> {
         Padding(
           padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
           child: TextScroll(
-            mostfinalsong[index].artist!,
+            Provider.of<MostPlayedProvider>(context).mostfinalsong[index].artist!,
             style: TextStyle(fontSize: 10, color: Colors.white60),
           ),
         ),

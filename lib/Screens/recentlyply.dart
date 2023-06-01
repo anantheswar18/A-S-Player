@@ -1,5 +1,6 @@
 import 'package:as_player/Screens/home.dart';
 import 'package:as_player/Screens/playingnow.dart';
+import 'package:as_player/state_management/recentlyManagement.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/src/widgets/framework.dart';
@@ -8,40 +9,37 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 import 'package:text_scroll/text_scroll.dart';
 
 import '../Model/recentlyplayed.dart';
-import 'miniplayer.dart';
 import 'minisecondplayer.dart';
 
-class RecentlyPlayedScreen extends StatefulWidget {
-  const RecentlyPlayedScreen({super.key});
+class RecentlyPlayedScreen extends StatelessWidget {
+   RecentlyPlayedScreen({super.key});
 
-  @override
-  State<RecentlyPlayedScreen> createState() => _RecentlyPlayedScreenState();
-}
-
-class _RecentlyPlayedScreenState extends State<RecentlyPlayedScreen> {
+  
   final List<RecentlyPlayed> recentlyplay = [];
-  final box = RecentlyPlayedBox.getInstance();
-  List<Audio> recentaudio = [];
+  // final box = RecentlyPlayedBox.getInstance();
+  // List<Audio> recentaudio = [];
 
-  void initState() {
-    final List<RecentlyPlayed> recentlyplayed =
-        box.values.toList().reversed.toList();
-    for (var item in recentlyplayed) {
-      recentaudio.add(Audio.file(item.songurl.toString(),
-          metas: Metas(
-              artist: item.artist,
-              title: item.songname,
-              id: item.id.toString())));
-    }
-    super.initState();
-  }
+  // void initState() {
+  //   final List<RecentlyPlayed> recentlyplayed =
+  //       box.values.toList().reversed.toList();
+  //   for (var item in recentlyplayed) {
+  //     recentaudio.add(Audio.file(item.songurl.toString(),
+  //         metas: Metas(
+  //             artist: item.artist,
+  //             title: item.songname,
+  //             id: item.id.toString())));
+  //   }
+  //   super.initState();
+  // }
 
   var size, height, width;
   @override
   Widget build(BuildContext context) {
+    Provider.of<RecentlyProvider>(context).recentlyInit();
     size = MediaQuery.of(context).size;
     height = size.height;
     width = size.width;
@@ -86,124 +84,34 @@ class _RecentlyPlayedScreenState extends State<RecentlyPlayedScreen> {
           physics: BouncingScrollPhysics(),
           child: Column(
             children: [
-              // Padding(
-              //   padding:
-              //       EdgeInsets.only(top: height * 0.09, right: width * 0.4),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: [
-              //       IconButton(
-              //           onPressed: () {
-              //             Navigator.of(context).pop();
-              //           },
-              //           icon: const Icon(
-              //             Icons.arrow_back_ios_new,
-              //             size: 30,
-              //             color: Colors.white,
-              //           )),
-              //       Text(
-              //         "Recently Played ",
-              //         style: GoogleFonts.lato(
-              //             textStyle: Theme.of(context).textTheme.bodyLarge,
-              //             fontSize: 25,
-              //             color: Colors.white),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // StaggeredGridView.countBuilder(
-              //   shrinkWrap: true,
-              //   crossAxisCount: 2,
-              //   itemCount: 10,
-              //   itemBuilder: (context, index) => gcol(),
-              //   staggeredTileBuilder: (index) =>
-              //       StaggeredTile.count(1, index.isEven ? 2 : 1),
-              //   mainAxisSpacing: 4.0,
-              //   crossAxisSpacing: 4.0,
-              // ),
-              // SizedBox(height: height * 3),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //   children: [
-              //     sqr(),
-              //     sqr()
-              //   ],
-              // ),
-              //  SizedBox(height: height*0.03),
-              //  Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //   children: [
-              //     sqr(),
-              //     sqr()
-              //   ],
-              // ),
-              // SizedBox(height: height*0.03),
-              //  Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //   children: [
-              //     sqr(),
-              //     sqr()
-              //   ],
-              // ),
-              // SizedBox(height: height*0.03),
-              //  Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //   children: [
-              //     sqr(),
-              //     sqr()
-              //   ],
-              // ),
-              // SizedBox(height: height*0.03),
-              //  Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //   children: [
-              //     sqr(),
-              //     sqr()
-              //   ],
-              // ),
-              // SingleChildScrollView(
-              //   child: Container(
-              //     child: ListView.builder(
-              //       itemCount: 10,
-              //       // physics: const NeverScrollableScrollPhysics(),
-              //       shrinkWrap: true,
-              //       itemBuilder: (context, index) {
-              //      return Padding(
-              //        padding: const EdgeInsets.all(8.0),
-              //        child: sqr(),
-              //      );
-              //     },),
-              //   ),
-              // )
+              
               SizedBox(height: height * 0.05),
-              ValueListenableBuilder<Box<RecentlyPlayed>>(
-                valueListenable: box.listenable(),
-                builder: ((context, Box<RecentlyPlayed> RecentDB, child) {
-                  List<RecentlyPlayed> Recentplayed =
-                      RecentDB.values.toList().reversed.toList();
-                  return Recentplayed.isNotEmpty
-                      ? Padding(
-                        padding:  EdgeInsets.only(bottom:height*0.1 ),
-                        child: GridView.builder(
-                            primary: false,
-                            shrinkWrap: true,
-                            itemCount: Recentplayed.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    mainAxisSpacing: 5.0, crossAxisCount: 2),
-                            itemBuilder: (context, index) {
-                              return sqr(index, Recentplayed);
-                            }),
-                      )
-                      : Padding(
-                          padding: EdgeInsets.only(top: height * 0.3),
-                          child: Text(
-                            "You Have't played any songs",
-                            style: GoogleFonts.kanit(color: Colors.white),
+              
+                  
+                   Consumer<RecentlyProvider>(
+                     builder:(context, value, child) =>  value.Recentplayed.isNotEmpty
+                        ? Padding(
+                          padding:  EdgeInsets.only(bottom:height*0.1 ),
+                          child: GridView.builder(
+                              primary: false,
+                              shrinkWrap: true,
+                              itemCount: value.Recentplayed.length,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      mainAxisSpacing: 5.0, crossAxisCount: 2),
+                              itemBuilder: (context, index) {
+                                return sqr(index, value.Recentplayed,context);
+                              }),
+                        )
+                        : Padding(
+                            padding: EdgeInsets.only(top: height * 0.3),
+                            child: Text(
+                              "You Have't played any songs",
+                              style: GoogleFonts.kanit(color: Colors.white),
+                            ),
                           ),
-                        );
-                }),
-              )
+                   ),
+               
             ],
           ),
         ),
@@ -211,12 +119,12 @@ class _RecentlyPlayedScreenState extends State<RecentlyPlayedScreen> {
     );
   }
 
-  Widget sqr(index, Recentplayed) {
+  Widget sqr(index, Recentplayed,context) {
     return Column(
       children: [
         InkWell(
           onTap: () {
-            audioPlayer.open(Playlist(audios: recentaudio, startIndex: index),
+            audioPlayer.open(Playlist(audios:Provider.of<RecentlyProvider>(context,listen: false).recentaudio, startIndex: index),
                 showNotification: true,
                 headPhoneStrategy: HeadPhoneStrategy.pauseOnUnplug,
                 loopMode: LoopMode.playlist);

@@ -1,19 +1,21 @@
-import 'package:as_player/Screens/popupsettings.dart';
+import 'package:as_player/Functions/notifications.dart';
+import 'package:as_player/widgets/popupsettings.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 
-class Settings extends StatefulWidget {
-  const Settings({super.key});
+class Settings extends StatelessWidget {
+  Settings({super.key});
 
-  @override
-  State<Settings> createState() => _SettingsState();
-}
-
-class _SettingsState extends State<Settings> {
   var size, height, width;
+
+  // bool status = false;
+  // late bool notificationStatus = true;
+
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
@@ -36,181 +38,51 @@ class _SettingsState extends State<Settings> {
           ),
         ),
         child: Column(
+          // mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: height * 0.08, right: width * 0.5),
-              child: Text(
-                "Settings",
-                style: GoogleFonts.lato(
-                    textStyle: Theme.of(context).textTheme.bodyLarge,
-                    fontSize: 40,
-                    color: Colors.white),
+              padding: EdgeInsets.only(top: height * 0.08, left: width * 0.05),
+              child: Row(
+                children: [
+                  Text(
+                    "Se",
+                    style: GoogleFonts.oswald(
+                        textStyle: Theme.of(context).textTheme.bodyLarge,
+                        fontSize: 35,
+                         fontWeight: FontWeight.w600,
+                        color: Color.fromARGB(255, 97, 132, 170)),
+                    // style: TextStyle(
+                    //   fontSize: 28,
+                    //   fontFamily: "Inter",
+                    //   fontWeight: FontWeight.bold,
+                    //   color: Colors.white
+                    // ),
+                  ),
+                  Text(
+                    "tti",
+                    style: GoogleFonts.oswald(
+                        textStyle: Theme.of(context).textTheme.bodyLarge,
+                        fontSize: 35,
+                         fontWeight: FontWeight.w700,
+                        color: Colors.white),
+                  ),
+                  Text(
+                    "ngs",
+                    style: GoogleFonts.oswald(
+                        textStyle: Theme.of(context).textTheme.bodyLarge,
+                        fontSize: 35,
+                         fontWeight: FontWeight.w800,
+                        color: Color.fromARGB(255, 97, 132, 170)),
+                  ),
+                ],
               ),
             ),
             SizedBox(
               height: height * 0.05,
             ),
-            // Padding(
-            //   padding: EdgeInsets.only(left: width * 0.10),
-            //   child: Row(
-            //     children: [
-            //       const Icon(
-            //         Icons.share,
-            //         size: 30,
-            //         color: Colors.white,
-            //       ),
-            //       SizedBox(
-            //         width: width * 0.10,
-            //       ),
-            //       const Text(
-            //         "Share App ",
-            //         style: TextStyle(
-            //             fontSize: 25,
-            //             color: Colors.white,
-            //             fontWeight: FontWeight.w500),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // SizedBox(
-            //   height: height * 0.015,
-            // ),
-            // line(),
-            // SizedBox(
-            //   height: height * 0.030,
-            // ),
-            // Padding(
-            //   padding: EdgeInsets.only(left: width * 0.10),
-            //   child: Row(
-            //     children: [
-            //       const Icon(
-            //         Icons.privacy_tip,
-            //         size: 30,
-            //         color: Colors.white,
-            //       ),
-            //       SizedBox(
-            //         width: width * 0.10,
-            //       ),
-            //       const Text(
-            //         "Privacy Policy ",
-            //         style: TextStyle(
-            //             fontSize: 25,
-            //             color: Colors.white,
-            //             fontWeight: FontWeight.w500),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // SizedBox(
-            //   height: height * 0.018,
-            // ),
-            // line(),
-            // SizedBox(
-            //   height: height * 0.030,
-            // ),
-            // Padding(
-            //   padding: EdgeInsets.only(left: width * 0.10),
-            //   child: Row(
-            //     children: [
-            //       const Icon(
-            //         Icons.info_outline,
-            //         size: 30,
-            //         color: Colors.white,
-            //       ),
-            //       SizedBox(
-            //         width: width * 0.10,
-            //       ),
-            //       const Text(
-            //         "About",
-            //         style: TextStyle(
-            //             fontSize: 25,
-            //             color: Colors.white,
-            //             fontWeight: FontWeight.w500),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // SizedBox(
-            //   height: height * 0.013,
-            // ),
-            // line(),
-            // SizedBox(
-            //   height: height * 0.030,
-            // ),
-            // Padding(
-            //   padding: EdgeInsets.only(left: width * 0.10),
-            //   child: Row(
-            //     children: [
-            //       const Icon(
-            //         Icons.document_scanner,
-            //         size: 30,
-            //         color: Colors.white,
-            //       ),
-            //       SizedBox(
-            //         width: width * 0.10,
-            //       ),
-            //       const Text(
-            //         "Terms and Condition",
-            //         style: TextStyle(
-            //             fontSize: 25,
-            //             color: Colors.white,
-            //             fontWeight: FontWeight.w500),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // SizedBox(
-            //   height: height * 0.015,
-            // ),
-            // line(),
-            // SizedBox(
-            //   height: height * 0.030,
-            // ),
-            InkWell(
-              onTap: () {
-                Share.share("https://play.google.com/store/apps/details?id=apps.musicplayer.as_player",
-                    subject: "A S Music Player");
-              },
-              child: items(
-                  Icon(
-                    Icons.share,
-                    size: 30,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    "Share App ",
-                    style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500),
-                  )),
-            ),
-            line(),
-            InkWell(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (builder) {
-                    return settingmenupopup(mdFilename: 'privacypolicy.md');
-                  },
-                );
-              },
-              child: items(
-                  Icon(
-                    Icons.privacy_tip_rounded,
-                    size: 30,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    "Privacy Policy ",
-                    style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500),
-                  )),
-            ),
-            line(),
-            InkWell(
+
+            // *****************About*********************
+            ListTile(
               onTap: () {
                 showAboutDialog(
                     context: context,
@@ -228,64 +100,132 @@ class _SettingsState extends State<Settings> {
                       Text("App development by Anantheswara Shenoy.V"),
                     ]);
               },
-              child: items(
-                  Icon(
-                    Icons.info_outline,
-                    size: 30,
+              leading: const Icon(
+                Icons.person,
+                size: 35,
+                color: Colors.white,
+              ),
+              title: Text(
+                "About",
+                style: TextStyle(
                     color: Colors.white,
-                  ),
-                  Text(
-                    "About  ",
-                    style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500),
-                  )),
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "Inter",
+                    fontSize: 18),
+              ),
             ),
-            line(),
-            InkWell(
+            // **********************Share**********************
+
+            ListTile(
               onTap: () {
-                showDialog(context: context, builder: (context) {
-                  return settingmenupopup(mdFilename: 'termsandconditons.md');
-                },);
+                Share.share(
+                    "https://play.google.com/store/apps/details?id=apps.musicplayer.as_player",
+                    subject: "A S Music Player");
               },
-              child: items(
-                  Icon(
-                    Icons.document_scanner_outlined,
-                    size: 30,
+              leading: const Icon(
+                Icons.share,
+                size: 35,
+                color: Colors.white,
+              ),
+              title: Text(
+                "Share",
+                style: TextStyle(
                     color: Colors.white,
-                  ),
-                  Text(
-                    "Terms And Conditions ",
-                    style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500),
-                  )),
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "Inter",
+                    fontSize: 18),
+              ),
             ),
-            line()
+            // ******************************NOtifications**********************
+            NotificationList(
+              title: "Notifications",
+              logo: Icons.notifications,
+            ),
+            // ListTile(
+            //   leading: Icon(
+            //     Icons.notifications,
+            //     size: 35,
+            //     color: Colors.white,
+            //   ),
+            //   title: Text(
+            //     "Notifications",
+            //     style: const TextStyle(
+            //         color: Colors.white,
+            //         fontWeight: FontWeight.bold,
+            //         fontFamily: "Inter",
+            //         fontSize: 18),
+            //   ),
+            //   trailing: Switch(
+            //     activeTrackColor: Colors.white,
+            //     activeColor: Colors.grey,
+            //     inactiveTrackColor: Colors.grey,
+            //     value: notificationStatus,
+            //     onChanged: (value) {
+            //       setState(() {
+            //         notificationStatus = value;
+            //       });
+            //     },
+            //   ),
+            // ),
+            // ****************Terms and  condition *************************
+            ListTile(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return settingmenupopup(mdFilename: 'termsandconditons.md');
+                  },
+                );
+              },
+              leading: const Icon(
+                Icons.book,
+                size: 35,
+                color: Colors.white,
+              ),
+              title: Text(
+                "Terms And Conditions",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "Inter",
+                    fontSize: 18),
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+                color: Colors.white,
+              ),
+            ),
+            // *************Privacy policy*************************
+            ListTile(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (builder) {
+                    return settingmenupopup(mdFilename: 'privacypolicy.md');
+                  },
+                );
+              },
+              leading: const Icon(
+                Icons.privacy_tip,
+                size: 35,
+                color: Colors.white,
+              ),
+              title: const Text(
+                "Privacy policy",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "Inter",
+                    fontSize: 18),
+              ),
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+                color: Colors.white,
+              ),
+            )
           ],
         ),
       ),
     );
   }
-
-  Widget items(
-    Widget icon,
-    Widget text,
-  ) {
-    return ListTile(
-     
-      leading: icon,
-      title: text,
-    );
-  }
-}
-
-Widget line() {
-  return const Divider(
-    color: Colors.white,
-    indent: 70,
-    endIndent: 10,
-  );
 }

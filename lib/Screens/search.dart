@@ -1,194 +1,161 @@
 import 'package:as_player/Model/songmodel.dart';
 import 'package:as_player/Screens/playingnow.dart';
+import 'package:as_player/state_management/searchManagement.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 import 'package:text_scroll/text_scroll.dart';
 
 import 'home.dart';
 
-class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+ValueNotifier<bool> ScrollNotifier = ValueNotifier(true);
+
+class SearchScreen extends StatelessWidget {
+  SearchScreen({super.key});
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
-}
 
-class _SearchScreenState extends State<SearchScreen> {
   // final AssetsAudioPlayer _audioPlayer = AssetsAudioPlayer();
-  final box = SongBox.getInstance();
+
+  // final box = SongBox.getInstance();
   late List<Songs> dbsongs;
   var size, height, width;
   final _searchController = TextEditingController();
-  List<Audio> allSongs = [];
-  void initState() {
-    dbsongs = box.values.toList();
-    for (var item in dbsongs) {
-      allSongs.add(Audio.file(item.songurl!,
-          metas: Metas(
-              title: item.songname,
-              artist: item.artist,
-              id: item.id.toString())));
-    }
-    super.initState();
-  }
+  // List<Audio> allSongs = [];
+  // void initState() {
+  //   dbsongs = box.values.toList();
+  //   for (var item in dbsongs) {
+  //     allSongs.add(Audio.file(item.songurl!,
+  //         metas: Metas(
+  //             title: item.songname,
+  //             artist: item.artist,
+  //             id: item.id.toString())));
+  //   }
+  //   super.initState();
+  // }
 
-  late List<Songs> another = List.from(dbsongs);
+  // late List<Songs> another = List.from(dbsongs);
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<SearchProvider>(context).searchInit();
     size = MediaQuery.of(context).size;
     height = size.height;
     width = size.width;
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Colors.transparent,
-      //   title: Text(
-      //     "Playing Now ",
-      //     style: GoogleFonts.lato(
-      //         textStyle: Theme.of(context).textTheme.bodyLarge,
-      //         fontSize: 30,
-      //         color: Colors.white),
-      //   ),
-      //   leading: IconButton(
-      //     onPressed: () {
-      //       Navigator.of(context).pop();
-      //     },
-      //     icon: const Icon(Icons.arrow_back_ios_new_outlined),
-      //     iconSize: 30,
-      //     color: Colors.white,
-      //   ),
-      //   actions: [
-      //     IconButton(onPressed: () {}, icon: Icon(Icons.lyrics_outlined))
-      //   ],
-      // ),
-      body: Container(
-        height: height,
+      body: ValueListenableBuilder(
+          valueListenable: ScrollNotifier,
+          builder: (context, index, _) {
+            return NotificationListener<UserScrollNotification>(
+              onNotification: (notification) {
+                final ScrollDirection direction = notification.direction;
+                // print(direction);
+                if (direction == ScrollDirection.reverse) {
+                  ScrollNotifier.value = false;
+                } else if (direction == ScrollDirection.forward) {
+                  ScrollNotifier.value = true;
+                }
 
-        width: width,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF000428),
-              Color.fromARGB(255, 97, 132, 170),
-            ],
-          ),
-        ),
-        child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              Padding(
-                padding:
-                    EdgeInsets.only(top: height * 0.07, right: width * 0.4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    // IconButton(
-                    //     onPressed: () {},
-                    //     icon: const Icon(
-                    //       Icons.arrow_back_ios_new,
-                    //       size: 30,
-                    //       color: Colors.white,
-                    //     )),
-                    Text(
-                      "Search ",
-                      style: GoogleFonts.lato(
-                          textStyle: Theme.of(context).textTheme.bodyLarge,
-                          fontSize: 40,
-                          color: Colors.white),
-                    ),
-                  ],
+                return true;
+              },
+              child: Container(
+                height: height,
+                width: width,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color(0xFF000428),
+                      Color.fromARGB(255, 97, 132, 170),
+                    ],
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: height * 0.07, left: width * 0.1),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Se",
+                              style: GoogleFonts.oswald(
+                                textStyle:
+                                    Theme.of(context).textTheme.bodyLarge,
+                                fontSize: 40,
+                                 fontWeight: FontWeight.w600,
+                                color: Color.fromARGB(255, 97, 132, 170),
+                              ),
+                            ),
+                            Text(
+                              "ar",
+                              style: GoogleFonts.oswald(
+                                  textStyle:
+                                      Theme.of(context).textTheme.bodyLarge,
+                                  fontSize: 40,
+                                   fontWeight: FontWeight.w700,
+                                  color: Colors.white),
+                            ),
+                            Text(
+                              "ch",
+                              style: GoogleFonts.oswald(
+                                textStyle:
+                                    Theme.of(context).textTheme.bodyLarge,
+                                fontSize: 40,
+                                 fontWeight: FontWeight.w600,
+                                color: Color.fromARGB(255, 97, 132, 170),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      searchBox(context),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: height * 0.10),
+                        child: SizedBox(
+                            height: height,
+                            child: Consumer<SearchProvider>(
+                              builder: (context, value, child) =>
+                                  value.another.isEmpty
+                                      ? Image.asset(
+                                          "assets/gif/bubble-gum-error-404.gif")
+                                      : ListView.builder(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount: value.another.length,
+                                          itemBuilder: (context, index) {
+                                            return con(index, context);
+                                          },
+                                        ),
+                            )),
+                      )
+                    ],
+                  ),
                 ),
               ),
-              searchBox(),
-              Padding(
-                padding:  EdgeInsets.only(bottom: height* 0.10),
-                child: SizedBox(
-                    height: height,
-                    child: ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: another.length,
-                        itemBuilder: (context, index) {
-                          return  con(index);
-                          // return Slidable(
-                              // closeOnScroll: true,
-                              // useTextDirection: true,
-                              // endActionPane: ActionPane(
-                              //     motion: const StretchMotion(),
-                              //     children: [
-                              //       // SlidableAction(
-                              //       //   borderRadius: BorderRadius.circular(20),
-                              //       //   padding: EdgeInsets.only(
-                              //       //       top: height * 0.02,
-                              //       //       left: width * 0.05,
-                              //       //       right: width * 0.05),
-                              //       //   autoClose: false,
-                              //       //   onPressed: (context) {
-                              //       //     return _onDismised();
-                              //       //   },
-                              //       //   backgroundColor: const Color.fromARGB(
-                              //       //       255, 97, 132, 170),
-                              //       //   icon: Icons.playlist_add,
-                              //       //   label: 'Add To Playlist',
-                              //       // )
-                              //     ]),
-                              // startActionPane: ActionPane(
-                              //     motion: const StretchMotion(),
-                              //     children: [
-                              //       SlidableAction(
-                              //         borderRadius: BorderRadius.circular(20),
-                              //         padding: EdgeInsets.only(
-                              //             top: height * 0.02,
-                              //             left: width * 0.05,
-                              //             right: width * 0.05),
-                              //         autoClose: true,
-                              //         onPressed: (context) {
-                              //           return _onDismised();
-                              //         },
-                              //         backgroundColor: Colors.red,
-                              //         icon: Icons.favorite_border_outlined,
-                              //         label: 'Add To Favorite',
-                              //       )
-                              // //     ]),
-                              // child: con(index)
-                              // );
-                        })),
-              )
-              // Container(
-              //   height: height,
-              //   child: con(),
-              // )
-              // ListView.separated(itemBuilder: (context,index){
-              //   return ListTile(
-              //     leading: Image.asset('assets/images/NightChanges.jpeg',),
-              //     title: Text("One Direction"),
-              //   );
-              // }, separatorBuilder: (context,index){
-              //   return Divider();
-              // }, itemCount: 10)
-            ],
-          ),
-        ),
-      ),
+            );
+          }),
     );
   }
 
-  Widget searchBox() {
+  Widget searchBox(context) {
     return Padding(
-      padding: EdgeInsets.only(top: height*0.06,left: width*0.090,right: width*0.090),
+      padding: EdgeInsets.only(
+          top: height * 0.06, left: width * 0.090, right: width * 0.090),
       child: TextFormField(
-        
         onTapOutside: (event) {
           FocusScope.of(context).requestFocus(FocusNode());
         },
-        onChanged: (value) => changeList(value),
+        onChanged: (value) =>
+            Provider.of<SearchProvider>(context, listen: false)
+                .changeListProvider(value),
         autofocus: false,
         controller: _searchController,
         cursorColor: Colors.grey,
@@ -199,12 +166,13 @@ class _SearchScreenState extends State<SearchScreen> {
             color: Colors.blueGrey.shade300,
           ),
           suffixIcon: IconButton(
-            icon: Icon(
-              Icons.clear,
-              color: Colors.blueGrey.shade300,
-            ),
-            onPressed: () => clearText(),
-          ),
+              icon: Icon(
+                Icons.clear,
+                color: Colors.blueGrey.shade300,
+              ),
+              onPressed: () {
+                clearText(context);
+              }),
           filled: true,
           fillColor: Colors.white,
           border: OutlineInputBorder(
@@ -220,47 +188,12 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  void clearText() {
+  void clearText(context) {
     _searchController.clear();
   }
 
-  // Widget sections() {
-  //   return ListView.separated(
-  //       shrinkWrap: true,
-  //       itemBuilder: (context, index) {
-  //         return ListTile(
-  //           leading: ClipRect(
-  //             child: Image.asset(
-  //               'assets/images/NightChanges.jpeg',
-  //               width: 50,
-  //             ),
-  //           ),
-  //           title: Text(
-  //             "Night Changes ",
-  //             style: GoogleFonts.aBeeZee(
-  //                 textStyle: Theme.of(context).textTheme.bodyLarge,
-  //                 fontSize: 20,
-  //                 color: Colors.white),
-  //           ),
-  //           subtitle: const Text(
-  //             "one Direction ",
-  //             style: TextStyle(color: Colors.grey),
-  //           ),
-  //           trailing: IconButton(
-  //               onPressed: () {},
-  //               icon: const Icon(
-  //                 Icons.more_vert_rounded,
-  //                 color: Colors.white,
-  //               )),
-  //         );
-  //       },
-  //       separatorBuilder: (context, index) {
-  //         return const Divider();
-  //       },
-  //       itemCount: 30);
-  // }
   void _onDismised() {}
-  Widget con(index) {
+  Widget con(index, context) {
     return Padding(
       padding: EdgeInsets.only(
           top: height * 0.02, left: width * 0.05, right: width * 0.05),
@@ -274,21 +207,26 @@ class _SearchScreenState extends State<SearchScreen> {
                   BoxShadow(
                     blurRadius: 15,
                     // spreadRadius: 2,
-                    
-                   
                   )
                 ]),
             child: ListTile(
               onTap: () {
                 PlayingNow.nowplayingindex.value = index;
-                audioPlayer.open(Playlist(audios: allSongs, startIndex: index),
+                audioPlayer.open(
+                    Playlist(
+                        audios:
+                            Provider.of<SearchProvider>(context, listen: false)
+                                .allSongs,
+                        startIndex: index),
                     showNotification: true,
                     headPhoneStrategy: HeadPhoneStrategy.pauseOnUnplug,
                     loopMode: LoopMode.playlist);
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => PlayingNow(),));
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => PlayingNow(),
+                ));
               },
               leading: QueryArtworkWidget(
-                id: another[index].id!,
+                id: Provider.of<SearchProvider>(context).another[index].id!,
                 type: ArtworkType.AUDIO,
                 keepOldArtwork: true,
                 artworkBorder: BorderRadius.circular(10),
@@ -297,16 +235,18 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               ),
               title: TextScroll(
-                another[index].songname!,
-                style: GoogleFonts.aBeeZee(
-                    textStyle: Theme.of(context).textTheme.bodyLarge,
-                    fontSize: 20,
-                    color: Colors.white),
+                Provider.of<SearchProvider>(context).another[index].songname!,
+               style: TextStyle(
+                  // fontSize: 28,
+                  fontFamily: "Inter",
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
                 velocity: Velocity(pixelsPerSecond: Offset(100, 0)),
                 intervalSpaces: 50,
               ),
               subtitle: TextScroll(
-                another[index].artist ?? "No Artist",
+                Provider.of<SearchProvider>(context).another[index].artist ??
+                    "No Artist",
                 // overflow: TextOverflow.ellipsis,
                 style: TextStyle(color: Colors.grey),
               ),
@@ -315,20 +255,20 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  void changeList(String value) {
-    setState(() {
-      another = dbsongs
-          .where((element) =>
-              element.songname!.toLowerCase().contains(value.toLowerCase()))
-          .toList();
-      allSongs.clear();
-      for (var item in another) {
-        allSongs.add(Audio.file(item.songurl.toString(),
-            metas: Metas(
-                artist: item.artist,
-                title: item.songname,
-                id: item.id.toString())));
-      }
-    });
-  }
+  // void changeList(String value) {
+
+  //     another = dbsongs
+  //         .where((element) =>
+  //             element.songname!.toLowerCase().contains(value.toLowerCase()))
+  //         .toList();
+  //     allSongs.clear();
+  //     for (var item in another) {
+  //       allSongs.add(Audio.file(item.songurl.toString(),
+  //           metas: Metas(
+  //               artist: item.artist,
+  //               title: item.songname,
+  //               id: item.id.toString())));
+  //     }
+
+  // }
 }

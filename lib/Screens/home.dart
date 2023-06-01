@@ -6,13 +6,14 @@ import 'package:as_player/Model/favorite.dart';
 import 'package:as_player/Model/mostplayeddb.dart';
 import 'package:as_player/Model/recentlyplayed.dart';
 import 'package:as_player/Model/songmodel.dart';
-import 'package:as_player/Screens/Cards.dart';
-import 'package:as_player/Screens/miniplayer.dart';
+import 'package:as_player/widgets/Cards.dart';
 import 'package:as_player/Screens/mostplayed.dart';
 import 'package:as_player/Screens/playingnow.dart';
 import 'package:as_player/Screens/playlist.dart';
 import 'package:as_player/Screens/playlistinside.dart';
 import 'package:as_player/Screens/recentlyply.dart';
+import 'package:as_player/state_management/favoriteMangement.dart';
+import 'package:as_player/state_management/homeManagement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:as_player/Functions/addToFavorite.dart';
+import 'package:provider/provider.dart';
 import 'package:text_scroll/text_scroll.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -32,53 +34,36 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import '../Functions/createplaylist.dart';
 import '../Model/playlistmodel.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-final alldbsongs = SongBox.getInstance();
-List<Songs> allDbsongs = alldbsongs.values.toList();
-final AssetsAudioPlayer audioPlayer = AssetsAudioPlayer.withId('0');
-final songbox = SongBox.getInstance();
-final box3 = favoritesbox.getInstance();
-List<favorites> favdb = box3.values.toList();
-bool istapped = false;
-final playlistbox = PlaylistSongsBox.getInstance();
-final mostbox = MostPlayedBox.getInstance();
-
 late List<PlaylistSongs> playlistsong = playlistbox.values.toList();
-final List<PlaylistModel> playlistsonglist = [];
 List<Audio> recentaudiohome = [];
 final boxrecent = RecentlyPlayedBox.getInstance();
+final playlistbox = PlaylistSongsBox.getInstance();
+final AssetsAudioPlayer audioPlayer = AssetsAudioPlayer.withId('0');
+final mostbox = MostPlayedBox.getInstance();
 final List<MostPlayed> mostplayedsong = mostbox.values.toList();
 List<MostPlayed> mostfinalsonghome = [];
 List<Audio> songshome = [];
 
-class _HomePageState extends State<HomePage> {
+class HomePage extends StatelessWidget {
+  HomePage({super.key});
+
+// static final alldbsongs = SongBox.getInstance();
+// List<Songs> allDbsongs = alldbsongs.values.toList();
+// final songbox = SongBox.getInstance();
+  static final box3 = favoritesbox.getInstance();
+  List<favorites> favdb = box3.values.toList();
+  bool istapped = false;
+
+  final List<PlaylistModel> playlistsonglist = [];
+
   @override
   var size, height, width;
-  bool _isChanged = false;
-  List<Audio> covertAudios = [];
-  void initState() {
-    List<Songs> dbsongs = songbox.values.toList();
-    for (var item in dbsongs) {
-      covertAudios.add(Audio.file(item.songurl!,
-          metas: Metas(
-            title: item.songname,
-            artist: item.artist,
-            id: item.id.toString(),
-          )));
-    }
-    frontrecent();
-    frontmost();
-    super.initState();
-  }
+  // bool _isChanged = false;
+  // List<Audio> covertAudios = [];
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<HomeProvider>(context).homeProviderInit();
     size = MediaQuery.of(context).size;
     height = size.height;
     width = size.width;
@@ -94,6 +79,7 @@ class _HomePageState extends State<HomePage> {
         shadowColor: Color.fromARGB(255, 97, 132, 170),
         leadingWidth: 80,
         leading: IconButton(
+            // iconSize: 55,
             onPressed: () {},
             icon: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
@@ -102,12 +88,35 @@ class _HomePageState extends State<HomePage> {
                   width: width * 0.100,
                   height: height * 0.10,
                 ))),
-        title: Text(
-          "AS Player",
-          style: GoogleFonts.aBeeZee(
-              textStyle: Theme.of(context).textTheme.bodyLarge,
-              fontSize: 30,
-              color: Colors.white),
+        title: Row(
+          children: [
+            Text(
+              "AS",
+              style: GoogleFonts.oswald(
+                textStyle: Theme.of(context).textTheme.bodyLarge,
+                fontSize: 35,
+                 fontWeight: FontWeight.w800,
+                color: Color.fromARGB(255, 97, 132, 170),
+              ),
+            ),
+            Text(
+              " Play",
+              style: GoogleFonts.oswald(
+                  textStyle: Theme.of(context).textTheme.bodyLarge,
+                  fontSize: 35,
+                   fontWeight: FontWeight.w700,
+                  color: Colors.white),
+            ),
+            Text(
+              "er",
+              style: GoogleFonts.oswald(
+                textStyle: Theme.of(context).textTheme.bodyLarge,
+                fontSize: 35,
+                 fontWeight: FontWeight.w600,
+                color: Color.fromARGB(255, 97, 132, 170),
+              ),
+            ),
+          ],
         ),
       ),
 
@@ -131,108 +140,13 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 SizedBox(height: height * 0.15),
-
                 CardsHome(),
                 SizedBox(height: height * 0.02),
-                // Padding(
-                //   padding: EdgeInsets.only(right: width * 0.3),
-                //   child: Text(
-                //     "Recently Played ",
-                //     style: GoogleFonts.lato(
-                //         textStyle: Theme.of(context).textTheme.bodyLarge,
-                //         fontSize: 30,
-                //         color: Colors.white),
-                //   ),
-                // ),
-                // SizedBox(
-                //   height: height * 0.01,
-                // ),
-                // Column(
-                //   children: [
-                //     ValueListenableBuilder<Box<RecentlyPlayed>>(
-                //       valueListenable: boxrecent.listenable(),
-                //       builder: (context, Box<RecentlyPlayed> RecentDB, child) {
-                //         List<RecentlyPlayed> Recentplayed =
-                //             RecentDB.values.toList().reversed.toList();
-                //         return Recentplayed.isNotEmpty
-                //             ? GridView.builder(
-                //                 padding: EdgeInsets.only(top: height * 0.03),
-                //                 // scrollDirection: Axis.horizontal,
-                //                 shrinkWrap: true,
-                //                 primary: false,
-                //                 gridDelegate:
-                //                     SliverGridDelegateWithFixedCrossAxisCount(
-                //                   crossAxisCount: 2,
-                //                 ),
-                //                 itemCount: Recentplayed.length == 1
-                //                     ? Recentplayed.length
-                //                     : 2,
-                //                 itemBuilder: (context, index) {
-                //                   return sqr2(index, Recentplayed);
-                //                 },
-                //               )
-                //             : Center(
-                //                 child: Text(
-                //                   "You Have't played any songs",
-                //                   style: GoogleFonts.kanit(color: Colors.white),
-                //                 ),
-                //                 heightFactor: height * 0.01,
-                //               );
-                //       },
-                //     ),
-                //     SizedBox(height: height * 0.01),
-                //     navRecently()
-                //   ],
-                // ),
-                // Padding(
-                //   padding:
-                //       EdgeInsets.only(top: height * 0.01, right: width * 0.4),
-                //   child: Text(
-                //     "Mostly Played ",
-                //     style: GoogleFonts.lato(
-                //         textStyle: Theme.of(context).textTheme.bodyLarge,
-                //         fontSize: 30,
-                //         color: Colors.white),
-                //   ),
-                // ),
-
                 SizedBox(
                   // height: height / 3,
                   width: width,
                   child: Column(
                     children: [
-                      // ValueListenableBuilder(
-                      //   valueListenable: mostbox.listenable(),
-                      //   builder:
-                      //       (context, Box<MostPlayed> mostplayedDB, child) {
-                      //     List<MostPlayed> mostplayedsongs =
-                      //         mostplayedDB.values.toList();
-                      //     return mostfinalsonghome.isNotEmpty
-                      //         ? GridView.builder(
-                      //             padding: EdgeInsets.only(top: height * 0.03),
-                      //             shrinkWrap: true,
-                      //             primary: false,
-                      //             gridDelegate:
-                      //                 SliverGridDelegateWithFixedCrossAxisCount(
-                      //                     crossAxisCount: 2),
-                      //             itemBuilder: (context, index) {
-                      //               return sqr(index);
-                      //             },
-                      //             itemCount: mostfinalsonghome.length == 1
-                      //                 ? mostfinalsonghome.length
-                      //                 : 2,
-                      //           )
-                      //         : Center(
-                      //             child: Text(
-                      //               "Your most played songs will appear here!",
-                      //               style:
-                      //                   GoogleFonts.kanit(color: Colors.white),
-                      //             ),
-                      //             heightFactor: height * 0.01,
-                      //           );
-                      //   },
-                      // ),
-
                       SizedBox(height: height * 0.01),
                       // navMost(),
                       Padding(
@@ -253,42 +167,41 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding: EdgeInsets.only(bottom: height * 0.2),
                   child: SizedBox(
-                      child: ValueListenableBuilder<Box<Songs>>(
-                    valueListenable: songbox.listenable(),
-                    builder: ((context, Box<Songs> allsongbox, child) {
-                      List<Songs> allDbsongs = allsongbox.values.toList();
-                      return Container(
-                        // height: height,
-                        // height: double.infinity,
-                        child: ListView.builder(
+                    child:
+                        // List<Songs> allDbsongs = allsongbox.values.toList();
+                        Container(
+                      // height: height,
+                      // height: double.infinity,
+                      child: Consumer<HomeProvider>(
+                        builder: (context, value, child) => ListView.builder(
                           padding: EdgeInsets.all(8),
                           // controller: _controller,
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: allDbsongs.length,
+                          itemCount: value.allDbsongs.length,
                           itemBuilder: ((context, songindex) {
                             return con(
-                              allDbsongs[songindex].songname,
-                              allDbsongs[songindex].artist ?? 'unknown',
-                              songindex,
-                              QueryArtworkWidget(
-                                keepOldArtwork: true,
-                                id: allDbsongs[songindex].id!,
-                                type: ArtworkType.AUDIO,
-                                nullArtworkWidget: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Image.asset(
-                                    'assets/images/AS player Logo.jpg',
+                                value.allDbsongs[songindex].songname,
+                                value.allDbsongs[songindex].artist ?? 'unknown',
+                                songindex,
+                                QueryArtworkWidget(
+                                  keepOldArtwork: true,
+                                  id: value.allDbsongs[songindex].id!,
+                                  type: ArtworkType.AUDIO,
+                                  nullArtworkWidget: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Image.asset(
+                                      'assets/images/AS player Logo.jpg',
+                                    ),
                                   ),
                                 ),
-                              ),
-                              songindex,
-                            );
+                                songindex,
+                                context);
                           }),
                         ),
-                      );
-                    }),
-                  )),
+                      ),
+                    ),
+                  ),
                 )
               ],
             ),
@@ -299,7 +212,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget sqr(index) {
+  Widget sqr(index, context) {
     return Column(
       children: [
         InkWell(
@@ -361,7 +274,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget sqr2(index, Recentplayed) {
+  Widget sqr2(index, Recentplayed, context) {
     return Column(
       children: [
         InkWell(
@@ -409,7 +322,12 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
             child: TextScroll(
               Recentplayed[index].songname!,
-              style: TextStyle(color: Colors.white),
+              // style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                  // fontSize: 28,
+                  fontFamily: "Inter",
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
           ),
         ),
@@ -417,17 +335,22 @@ class _HomePageState extends State<HomePage> {
           padding: EdgeInsets.only(left: width * 0.05, right: width * 0.01),
           child: TextScroll(
             Recentplayed[index].artist ?? "No Artist",
-            style: GoogleFonts.lato(
-                textStyle: Theme.of(context).textTheme.bodyLarge,
+            // style: GoogleFonts.lato(
+            //     textStyle: Theme.of(context).textTheme.bodyLarge,
+            //     fontSize: 12,
+            //     color: const Color.fromARGB(255, 197, 190, 190)),
+            style: TextStyle(
                 fontSize: 12,
-                color: const Color.fromARGB(255, 197, 190, 190)),
+                fontFamily: "Inter",
+                fontWeight: FontWeight.bold,
+                color: Colors.white),
           ),
         ),
       ],
     );
   }
 
-  Widget navRecently() {
+  Widget navRecently(context) {
     return SizedBox(
       width: width * 0.90,
       height: height * 0.06,
@@ -457,7 +380,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget navMost() {
+  Widget navMost(context) {
     return SizedBox(
       width: width * 0.90,
       height: height * 0.06,
@@ -486,10 +409,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget con(
-      String? musicname, String? subname, index, coverImage, int songindex) {
+  Widget con(String? musicname, String? subname, index, coverImage,
+      int songindex, context) {
     RecentlyPlayed Rsongs;
-    Songs songs = allDbsongs[songindex];
+    Songs songs = Provider.of<HomeProvider>(context).allDbsongs[songindex];
     MostPlayed mostsong = mostplayedsong[songindex];
     return Padding(
       padding: EdgeInsets.only(
@@ -508,7 +431,10 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               PlayingNow.nowplayingindex.value = songindex;
               audioPlayer.open(
-                  Playlist(audios: covertAudios, startIndex: songindex),
+                  Playlist(
+                      audios: Provider.of<HomeProvider>(context, listen: false)
+                          .covertAudios,
+                      startIndex: songindex),
                   headPhoneStrategy: HeadPhoneStrategy.pauseOnUnplugPlayOnPlug,
                   showNotification: true,
                   loopMode: LoopMode.playlist);
@@ -528,7 +454,12 @@ class _HomePageState extends State<HomePage> {
             leading: coverImage,
             title: TextScroll(
               musicname!,
-              style: TextStyle(color: Colors.white),
+              // style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                  // fontSize: 28,
+                  fontFamily: "Inter",
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
               intervalSpaces: 10,
               velocity: Velocity(pixelsPerSecond: Offset(50, 0)),
             ),
@@ -573,7 +504,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                   onTap: () {
                     if (checkFavStatus(songs.id, BuildContext)) {
-                      addToFav(songs.id);
+                      Provider.of<FavoriteProvider>(context, listen: false)
+                          .addToFavProvider(songs.id);
+                      // addToFav(songs.id);
                       final snackbar = SnackBar(
                         content: Text(
                           "Added to Favorites",
@@ -587,7 +520,9 @@ class _HomePageState extends State<HomePage> {
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackbar);
                     } else if (!checkFavStatus(songs.id, BuildContext)) {
-                      removeFav(songs.id);
+                      // removeFav(songs.id);
+                      Provider.of<FavoriteProvider>(context, listen: false)
+                          .removeFavProvider(songs.id);
                       final snackbar2 = SnackBar(
                         content: Text(
                           "Removed from Favorites",
@@ -601,9 +536,6 @@ class _HomePageState extends State<HomePage> {
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackbar2);
                     }
-                    setState(() {
-                      istapped = !istapped;
-                    });
                   },
                 )
               ],
@@ -646,7 +578,10 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: height * 0.01),
-                  child: Text("Add To Playlist"),
+                  child: Text(
+                    "Add To Playlist",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
 
                 ElevatedButton(
@@ -680,7 +615,8 @@ class _HomePageState extends State<HomePage> {
                                     playlistsong[index].playlistName!,
                                     index,
                                     playlistsongs,
-                                    songindex);
+                                    songindex,
+                                    context);
                               }),
                             )
                           : Text(
@@ -697,7 +633,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> PopUpPlaylistCreate(BuildContext context2) async {
+  Future<void> PopUpPlaylistCreate(BuildContext context) async {
     final myController = TextEditingController();
     return showDialog(
       barrierColor: Color.fromARGB(255, 16, 36, 70),
@@ -743,7 +679,7 @@ class _HomePageState extends State<HomePage> {
               ),
               child: const Text('Create'),
               onPressed: () {
-                CreatePlaylist(myController.text, context2);
+                CreatePlaylist(myController.text, context);
                 Navigator.of(context).pop();
               },
             ),
@@ -753,7 +689,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget playlistcol(playlistname, indexe, playlistsongs, songindex) {
+  Widget playlistcol(playlistname, indexe, playlistsongs, songindex, context) {
     return Padding(
       padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
       child: Container(
@@ -765,7 +701,7 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               PlaylistSongs? playsongs = playlistsongs.getAt(indexe);
               List<Songs> playsongDB = playsongs!.playlistsSongs!;
-              List<Songs> songDB = songbox.values.toList();
+              List<Songs> songDB = HomeProvider.songbox.values.toList();
               bool AlreadyAdded = playsongDB
                   .any((element) => element.id == songDB[songindex].id);
               if (!AlreadyAdded) {

@@ -9,19 +9,17 @@ import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'home.dart';
 import 'mylibrary.dart';
 
-class SnakeNavbarScreen extends StatefulWidget {
-  const SnakeNavbarScreen({super.key});
+class SnakeNavbarScreen extends StatelessWidget {
+   SnakeNavbarScreen({super.key});
 
-  @override
-  State<SnakeNavbarScreen> createState() => _SnakeNavbarScreenState();
-}
-
-class _SnakeNavbarScreenState extends State<SnakeNavbarScreen> {
   SnakeShape snakeShape = SnakeShape.circle;
+
   Color selectedColor = Color.fromARGB(255, 9, 41, 58);
+
   Color unselectedColor = const Color(0xFF091227);
 
   bool showSelectedLabels = false;
+
   bool showUnselectedLabels = false;
 
   int _selectedItemPosition = 0;
@@ -29,21 +27,13 @@ class _SnakeNavbarScreenState extends State<SnakeNavbarScreen> {
   final _pageController = PageController(initialPage: 0);
 
   final List<Widget> screens = [
-    const HomePage(),
-    const SearchScreen(),
-    const MyLibrary(),
-    const Settings(),
+     HomePage(),
+     SearchScreen(),
+     MyLibrary(),
+     Settings(),
   ];
 
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  void initState() {
-    super.initState();
-  }
-
+  // void dispose() {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,30 +97,5 @@ class _SnakeNavbarScreenState extends State<SnakeNavbarScreen> {
         unselectedLabelStyle: const TextStyle(fontSize: 10),
       ),
     );
-  }
-
-  void _onpagechange(int page) {
-    switch (page) {
-      case 0:
-        setState(() {
-          HomePage();
-        });
-        break;
-      case 1:
-        setState(() {
-          SearchScreen();
-        });
-        break;
-      case 2:
-        setState(() {
-          MyLibrary();
-        });
-        break;
-      case 3:
-        setState(() {
-          Settings();
-        });
-        break;
-    }
   }
 }

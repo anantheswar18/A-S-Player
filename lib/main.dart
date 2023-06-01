@@ -8,6 +8,14 @@ import 'package:as_player/Model/songmodel.dart';
 // import 'package:as_player/Screens/mostplayed.dart';
 // import 'package:as_player/Screens/playlist.dart';
 import 'package:as_player/Screens/splash.dart';
+import 'package:as_player/state_management/favoriteMangement.dart';
+import 'package:as_player/state_management/homeManagement.dart';
+import 'package:as_player/state_management/mostPlayedManagement.dart';
+import 'package:as_player/state_management/playlistMangement.dart';
+import 'package:as_player/state_management/recentlyManagement.dart';
+import 'package:as_player/state_management/searchManagement.dart';
+import 'package:as_player/state_management/settingsManagement.dart';
+import 'package:as_player/state_management/splashManagement.dart';
 // import 'package:as_player/bottom.dart';
 // import 'package:as_player/home.dart';
 // import 'package:as_player/mylibrary.dart';
@@ -19,6 +27,7 @@ import 'package:as_player/Screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:provider/provider.dart';
 // import 'package:flutter/src/widgets/framework.dart';
 // import 'package:flutter/src/widgets/placeholder.dart';
 
@@ -44,16 +53,44 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      // darkTheme: ThemeData.dark(),
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Colors.white,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => SplashProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => HomeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => FavoriteProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => RecentlyProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MostPlayedProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SearchProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => PlaylistProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SettingsProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        // darkTheme: ThemeData.dark(),
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primaryColor: Colors.white,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
 
-        // primarySwatch:  Colors.transparent
+          // primarySwatch:  Colors.transparent
+        ),
+        home: const SplashScreen(),
       ),
-      home: const SplashScreen(),
     );
   }
 }

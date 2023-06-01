@@ -15,18 +15,17 @@ import 'package:text_scroll/text_scroll.dart';
 import '../Model/playlistmodel.dart';
 import '../Model/playlistmodel.dart';
 
-class PlayList extends StatefulWidget {
-  const PlayList({super.key});
+class PlayList extends StatelessWidget {
+  PlayList({super.key});
 
-  @override
-  State<PlayList> createState() => _PlayListState();
-}
-
-class _PlayListState extends State<PlayList> {
   var size, height, width;
+
   final playlistbox = PlaylistSongsBox.getInstance();
+
   late List<PlaylistSongs> playlistsong = playlistbox.values.toList();
+
   final List<PlaylistModel> playlistsonglist = [];
+
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
@@ -38,12 +37,36 @@ class _PlayListState extends State<PlayList> {
         toolbarHeight: height * 0.08,
         backgroundColor: const Color(0xFF000428),
         // shadowColor: Color.fromARGB(255, 97, 132, 170),
-        title: Text(
-          "PlayList ",
-          style: GoogleFonts.lato(
-              textStyle: Theme.of(context).textTheme.bodyLarge,
-              fontSize: 25,
-              color: Colors.white),
+        title: Row(
+          children: [
+            Text(
+              "Pl",
+              style: GoogleFonts.archivo(
+                textStyle: Theme.of(context).textTheme.bodyLarge,
+                fontSize: 30,
+                fontWeight: FontWeight.w800,
+                color: Color.fromARGB(255, 97, 132, 170),
+              ),
+            ),
+            Text(
+              "ayL",
+              style: GoogleFonts.archivo(
+                textStyle: Theme.of(context).textTheme.bodyLarge,
+                fontSize: 30,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+              ),
+            ),
+            Text(
+              "ist",
+              style: GoogleFonts.archivo(
+                textStyle: Theme.of(context).textTheme.bodyLarge,
+                fontSize: 30,
+                fontWeight: FontWeight.w600,
+                color: Color.fromARGB(255, 97, 132, 170),
+              ),
+            ),
+          ],
         ),
         leading: IconButton(
             onPressed: () {
@@ -89,7 +112,8 @@ class _PlayListState extends State<PlayList> {
                         fontSize: 20,
                         color: Colors.white,
                         fontWeight: FontWeight.w500),
-                  )),
+                  ),
+                  context),
               SizedBox(
                 height: height * 0.01,
               ),
@@ -107,7 +131,7 @@ class _PlayListState extends State<PlayList> {
                             ),
                             itemCount: playlistsong.length,
                             itemBuilder: ((context, index) {
-                              return playlistcol(index, playlistsong);
+                              return playlistcol(index, playlistsong, context);
                             }),
                           )
                         : Padding(
@@ -119,51 +143,6 @@ class _PlayListState extends State<PlayList> {
                             ),
                           );
                   })
-              // col(
-              //     Image.asset(
-              //       'assets/images/romantic.jpeg',
-              //       fit: BoxFit.cover,
-              //       width: 70,
-              //     ),
-              //     const Text(
-              //       'Romantic Songs',
-              //       style: TextStyle(
-              //           fontSize: 20,
-              //           color: Colors.white,
-              //           fontWeight: FontWeight.w500),
-              //     )),
-              // SizedBox(
-              //   height: height * 0.01,
-              // ),
-              // col(
-              //     Image.asset(
-              //       'assets/images/workout.jpeg',
-              //       height: height * 0.5,
-              //     ),
-              //     const Text(
-              //       'WorkOut Songs',
-              //       style: TextStyle(
-              //           fontSize: 20,
-              //           color: Colors.white,
-              //           fontWeight: FontWeight.w500),
-              //     )),
-              // SizedBox(
-              //   height: height * 0.01,
-              // ),
-              // col(
-              //     Image.asset(
-              //       'assets/images/party.jpeg',
-              //       width: 60,
-              //       height: 60,
-              //       fit: BoxFit.cover,
-              //     ),
-              //     const Text(
-              //       'Party Songs',
-              //       style: TextStyle(
-              //           fontSize: 20,
-              //           color: Colors.white,
-              //           fontWeight: FontWeight.w500),
-              //     ))
             ],
           ),
         ),
@@ -171,7 +150,7 @@ class _PlayListState extends State<PlayList> {
     );
   }
 
-  Widget col(Widget icon, Widget head) {
+  Widget col(Widget icon, Widget head, context) {
     return Padding(
       padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
       child: Container(
@@ -181,7 +160,7 @@ class _PlayListState extends State<PlayList> {
             borderRadius: BorderRadius.circular(10)),
         child: ListTile(
           onTap: () {
-            PopUpPlaylistCreate();
+            PopUpPlaylistCreate(context);
           },
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(20),
@@ -206,7 +185,7 @@ class _PlayListState extends State<PlayList> {
     );
   }
 
-  Widget playlistcol(index, playlistsong) {
+  Widget playlistcol(index, playlistsong, context) {
     return Padding(
       padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
       child: Container(
@@ -224,23 +203,23 @@ class _PlayListState extends State<PlayList> {
             ));
           },
           leading: ClipRRect(
-            
-            // borderRadius: BorderRadius.circular(20),
-            child: Padding(
-              padding:  EdgeInsets.only(left: width*0.01,top: height*0.02),
-              child: CircleAvatar(
-                radius: 30,
-                child:  Image.asset(
+
+              // borderRadius: BorderRadius.circular(20),
+              child: Padding(
+            padding: EdgeInsets.only(left: width * 0.01, top: height * 0.02),
+            child: CircleAvatar(
+              radius: 30,
+              child: Image.asset(
                 'assets/images/disk.jpg',
                 fit: BoxFit.cover,
               ),
+            ),
+          )
+              // Image.asset(
+              //   'assets/images/disk.jpg',
+              //   fit: BoxFit.cover,
+              // ),
               ),
-            )
-            // Image.asset(
-            //   'assets/images/disk.jpg',
-            //   fit: BoxFit.cover,
-            // ),
-          ),
           title: Padding(
               padding: EdgeInsets.only(top: height * 0.02),
               child: TextScroll(
@@ -252,7 +231,7 @@ class _PlayListState extends State<PlayList> {
             child: Wrap(children: [
               IconButton(
                   onPressed: () {
-                    PopUpPlaylistEdit(index,context);
+                    PopUpPlaylistEdit(index, context);
                   },
                   icon: const Icon(
                     Icons.edit,
@@ -261,7 +240,7 @@ class _PlayListState extends State<PlayList> {
                   )),
               IconButton(
                   onPressed: () {
-                    PopUpPlaylistdelete(index);
+                    PopUpPlaylistdelete(index, context);
                   },
                   icon: const Icon(
                     Icons.delete,
@@ -275,7 +254,7 @@ class _PlayListState extends State<PlayList> {
     );
   }
 
-  Future<void> PopUpPlaylistCreate() async {
+  Future<void> PopUpPlaylistCreate(context) async {
     final myController = TextEditingController();
     return showDialog(
       barrierColor: Color.fromARGB(255, 16, 36, 70),
@@ -321,7 +300,7 @@ class _PlayListState extends State<PlayList> {
               ),
               child: const Text('Create'),
               onPressed: () {
-                CreatePlaylist(myController.text,context);
+                CreatePlaylist(myController.text, context);
                 Navigator.of(context).pop();
               },
             ),
@@ -331,7 +310,7 @@ class _PlayListState extends State<PlayList> {
     );
   }
 
-  Future<void> PopUpPlaylistEdit(index,context) async {
+  Future<void> PopUpPlaylistEdit(index, context) async {
     final editController = TextEditingController();
     return showDialog(
       barrierColor: Color.fromARGB(255, 16, 36, 70),
@@ -377,9 +356,8 @@ class _PlayListState extends State<PlayList> {
               ),
               child: const Text('Rename'),
               onPressed: () {
-                editPlaylist(editController.text, index,context);
+                editPlaylist(editController.text, index, context);
                 Navigator.of(context).pop();
-               
               },
             ),
           ],
@@ -388,7 +366,7 @@ class _PlayListState extends State<PlayList> {
     );
   }
 
-  Future<void> PopUpPlaylistdelete(index) async {
+  Future<void> PopUpPlaylistdelete(index, context) async {
     return showDialog(
       barrierColor: Color.fromARGB(255, 16, 36, 70),
       context: context,
@@ -422,8 +400,8 @@ class _PlayListState extends State<PlayList> {
                 deletePlaylist(index);
                 Navigator.of(context).pop();
                 AnimatedSnackBar.material("Playlist Deleted",
-            type: AnimatedSnackBarType.error)
-        .show(context);
+                        type: AnimatedSnackBarType.error)
+                    .show(context);
               },
             ),
           ],

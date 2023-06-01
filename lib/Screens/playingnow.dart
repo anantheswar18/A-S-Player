@@ -1,5 +1,7 @@
 import 'package:as_player/Functions/lyricsfunction.dart';
 import 'package:as_player/Model/songmodel.dart';
+import 'package:as_player/state_management/favoriteMangement.dart';
+import 'package:as_player/state_management/homeManagement.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -9,6 +11,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:marquee/marquee.dart';
+import 'package:provider/provider.dart';
 import 'package:text_scroll/text_scroll.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -232,7 +235,7 @@ class _PlayingNowState extends State<PlayingNow> {
                                                   int.parse(playing
                                                       .audio.audio.metas.id!),
                                                   BuildContext)) {
-                                                addToFav(
+                                              Provider.of<FavoriteProvider>(context,listen: false).addToFavProvider(
                                                   int.parse(playing
                                                       .audio.audio.metas.id!),
                                                 );
@@ -259,7 +262,7 @@ class _PlayingNowState extends State<PlayingNow> {
                                                   int.parse(playing
                                                       .audio.audio.metas.id!),
                                                   BuildContext)) {
-                                                removeFav(
+                                            Provider.of<FavoriteProvider>(context,listen: false).removeFavProvider(
                                                   int.parse(playing
                                                       .audio.audio.metas.id!),
                                                 );
@@ -524,7 +527,7 @@ class _PlayingNowState extends State<PlayingNow> {
     );
   }
 
-  Widget playlistcol(playlistname, indexe, playlistsongs, songindex) {
+  Widget playlistcol(playlistname, index, playlistsongs, songindex) {
     return Padding(
       padding: EdgeInsets.only(left: width * 0.05, right: width * 0.05),
       child: Container(
@@ -534,9 +537,9 @@ class _PlayingNowState extends State<PlayingNow> {
             borderRadius: BorderRadius.circular(10)),
         child: ListTile(
             onTap: () {
-              PlaylistSongs? playsongs = playlistsongs.getAt(indexe);
+              PlaylistSongs? playsongs = playlistsongs.getAt(index);
               List<Songs> playsongDB = playsongs!.playlistsSongs!;
-              List<Songs> songDB = songbox.values.toList();
+              List<Songs> songDB =HomeProvider.songbox.values.toList();
               bool AlreadyAdded = playsongDB
                   .any((element) => element.id == songDB[songindex].id);
               if (!AlreadyAdded) {
@@ -548,9 +551,9 @@ class _PlayingNowState extends State<PlayingNow> {
                     songurl: songDB[songindex].songurl));
               }
               playlistsongs.putAt(
-                  indexe,
+                  index,
                   PlaylistSongs(
-                      playlistName: playlistsong[indexe].playlistName!,
+                      playlistName: playlistsong[index].playlistName!,
                       playlistsSongs: playsongDB));
               Navigator.of(context).pop();
               showTopSnackBar(
